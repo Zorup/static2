@@ -1,0 +1,26 @@
+.custom-collapse-item{
+    padding: 0.5rem 1rem;
+    margin: 0 0.5rem;
+    display: block;
+    color: #3a3b45;
+    text-decoration: none;
+    border-radius: 0.35rem;
+    white-space: nowrap;
+}
+
+.abtn{
+    border: 0;
+    outline: 0;
+    background-color: transparent;
+    cursor: pointer;
+    color: black;
+}
+
+.abtn:hover{
+    color:mediumpurple;
+}
+
+.abtn:focus{
+    border: none;
+    outline:none;
+}
