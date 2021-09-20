@@ -2,6 +2,7 @@ import React, {useState} from 'react'
 import SidebarToggleTop from './SideBarToggleTop'
 import SearchBar from './SearchBar'
 import Notification from './Notification'
+import UserInformation from './UserInformation'
 
 function TopBar(){
     return(
@@ -12,6 +13,8 @@ function TopBar(){
             <ul className="navbar-nav ml-auto">
                 <Notification section="Alerts Center" icon="fa-bell"/>
                 <Notification section="Message Center" icon="fa-envelope"/>
+                <div className="topbar-divider d-none d-sm-block"></div>
+                <UserInformation/>
             </ul>
         </nav>
     )

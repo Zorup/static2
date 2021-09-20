@@ -1,8 +1,5 @@
 import './SideBar.css'
 
-{/**
-그룹 관련 데이터 props로 받아서 처리하던가 해야할듯.
-*/}
 function SideBar(){
     return(
         <ul className="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" id="accordionSidebar">
@@ -10,7 +7,7 @@ function SideBar(){
                 <div className="sidebar-brand-icon rotate-n-15">
                     <i className="fas fa-laugh-wink"></i>
                 </div>
-                <div className="sidebar-brand-text mx-3">[차후 그룹명 입력] <sup>1</sup></div>
+                <div className="sidebar-brand-text mx-3">GroupWare <sup>1</sup></div>
             </a>
             <hr className="sidebar-divider my-0"></hr>
             <hr className="sidebar-divider"></hr>
