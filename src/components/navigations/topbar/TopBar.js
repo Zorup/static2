@@ -4,7 +4,7 @@ import SearchBar from './SearchBar'
 import Notification from './Notification'
 import UserInformation from './UserInformation'
 
-function TopBar(){
+function TopBar({toggle, setToggle}){
     return(
         <nav className="navbar navbar-expand navbar-light navbar-fixed-top  bg-white topbar mb-4 static-top shadow w-100" id="topNavbar">
             <SidebarToggleTop/>

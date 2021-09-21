@@ -7,7 +7,8 @@ import LoginPage from './pages/LoginPage';
 
 function App() {
   const [isLogin, setIsLogin] = useState(false);
-
+  const [loginUser, setLoginUser] = useState({});
+  
   useEffect(() => {
     setIsLogin(sessionStorage.getItem('login') === 'true')
   }, [])

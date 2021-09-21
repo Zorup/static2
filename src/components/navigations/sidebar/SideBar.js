@@ -1,8 +1,12 @@
 import './SideBar.css'
+import React, { useState, useCallback } from 'react';
 
-function SideBar(){
+function SideBar({toggle, setToggle}){
+    const [isToggle, setIsToggle] = useState(toggle);
+    const onClickToggle = useCallback (()=>setIsToggle(!isToggle), []);
+
     return(
-        <ul className="navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" id="accordionSidebar">
+        <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (isToggle ? ' toggled' : '')} id="accordionSidebar">
             <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                 <div className="sidebar-brand-icon rotate-n-15">
                     <i className="fas fa-laugh-wink"></i>
@@ -43,7 +47,7 @@ function SideBar(){
             {/** 사이드바 토글 */}
             <hr className="sidebar-divider d-none d-md-block"></hr>
             <div className="text-center d-none d-md-inline">
-                <button className="rounded-circle border-0" id="sidebarToggle"></button>
+                <button className="rounded-circle border-0" id="sidebarToggle" onClick={onClickToggle}></button>
             </div>
         </ul>
     )

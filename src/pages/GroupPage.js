@@ -8,7 +8,8 @@ import axios from 'axios';
 
 function GroupPage() {
     const [posts, setPosts] = useState([]); 
-  
+    const [toggle, setToggle] = useState(false);
+    
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
@@ -22,15 +23,17 @@ function GroupPage() {
       fetchPosts();
     },[])
   
-    console.log(posts);
-  
+    const postList = posts.map(item =>(
+        <Post post={item} key={item.postId}/>
+    ));
+
     return (
       <div id="wrapper">
-        <SideBar/>
+        <SideBar toggle={toggle} setToggle={setToggle}/>
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-              <TopBar/>
+              <TopBar toggle={toggle} setToggle={setToggle}/>
               <div className="container-fluid">
                 <CreatePost/>
                 <hr></hr>
@@ -38,7 +41,7 @@ function GroupPage() {
                   <div className="d-flex row">
                     <div className="col-md-7">
                       <div className="d-flex flex-column comment-section">
-                        <Post posts={posts}/>
+                        {postList}
                       </div>
                     </div>
                   </div>

@@ -1,8 +1,7 @@
 import './Comment.css'
 
-function Comment({comments}){
-
-    const commentList = comments.map(comment=>
+function Comment({comment}){
+    return (
     <>
         <div className="comment">
             <div className="media">
@@ -21,11 +20,9 @@ function Comment({comments}){
                     </div>
                 </div>
             </div>
-    </div>
+        </div>
     </>
-    );
-
-    return commentList;
+    )
 }
 
 export default Comment

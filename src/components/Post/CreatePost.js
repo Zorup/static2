@@ -17,7 +17,7 @@ function CreatePost(){
                         <form id="post-write-form" className="mt-10">
                             <div className="d-flex flex-row align-items-start">
                                 <input className="current-forum-id" name='forumId' className="hideElement"></input>
-                                <input name='groupId' value="1" className="hideElement"></input>
+                                <input name='groupId' className="hideElement"></input>
                                 <textarea name ='content' className="form-control ml-1 shadow-none textarea" placeholder="게시글 내용을 입력하세요."></textarea>
                             </div>
                             <div className="mt-2 text-right">

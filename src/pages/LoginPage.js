@@ -1,12 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 
 function LoginPage(){
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
-    const onChagneUserId = e=>setUserId(e.target.value);
-    const onChangePassword = e=>setPassword(e.target.value);
+    const onChagneUserId = useCallback (e=>setUserId(e.target.value), []);
+    const onChangePassword = useCallback (e=>setPassword(e.target.value), []);
 
     const signIn = async ()=>{
         try{
@@ -57,10 +57,10 @@ function LoginPage(){
                                     </div>
                                     <hr></hr>
                                     <div className="text-center">
-                                        <button className="small abtn" onclick='movForgot()'>Forgot Password?</button>
+                                        <button className="small abtn">Forgot Password?</button>
                                     </div>
                                     <div className="text-center">
-                                        <button className="small abtn" onclick='movRegiserPage()'>Create an Account!</button>
+                                        <button className="small abtn">Create an Account!</button>
                                     </div>
                                 </div>
                             </div>
