@@ -9,7 +9,8 @@ import axios from 'axios';
 function GroupPage() {
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
-    
+    const [userInformation, setUserInformation] = useState({});
+
     const controlSideBar = (state) => {
       setToggle(state);
     };
@@ -24,6 +25,17 @@ function GroupPage() {
         }catch(e){
         }
       };
+
+      const fetchUserInfo = async()=>{
+        try{
+          const response = await axios.get(
+            'http://localhost:8081/main/v1/user-info'
+          );
+          setUserInformation(response.data);
+        }catch(e){
+        }
+      };
+
       fetchPosts();
     },[])
 
@@ -65,6 +77,5 @@ function GroupPage() {
       </div>
     );
   }
-
 
 export default GroupPage
