@@ -1,13 +1,18 @@
 import React, {useState} from 'react'
-import SidebarToggleTop from './SideBarToggleTop'
 import SearchBar from './SearchBar'
 import Notification from './Notification'
 import UserInformation from './UserInformation'
 
 function TopBar({toggle, setToggle}){
+    const controlParentToggle = () =>{
+        setToggle(!toggle);
+    };
+
     return(
         <nav className="navbar navbar-expand navbar-light navbar-fixed-top  bg-white topbar mb-4 static-top shadow w-100" id="topNavbar">
-            <SidebarToggleTop/>
+            <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3" onClick={controlParentToggle}>
+                <i className="fa fa-bars"></i>
+            </button>
             <SearchBar/>
 
             <ul className="navbar-nav ml-auto">

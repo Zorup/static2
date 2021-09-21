@@ -10,6 +10,10 @@ function GroupPage() {
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
     
+    const controlSideBar = (state) => {
+      setToggle(state);
+    };
+
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
@@ -22,18 +26,18 @@ function GroupPage() {
       };
       fetchPosts();
     },[])
-  
+
     const postList = posts.map(item =>(
         <Post post={item} key={item.postId}/>
     ));
 
     return (
       <div id="wrapper">
-        <SideBar toggle={toggle} setToggle={setToggle}/>
+        <SideBar toggle={toggle} setToggle={controlSideBar}/>
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-              <TopBar toggle={toggle} setToggle={setToggle}/>
+              <TopBar toggle={toggle} setToggle={controlSideBar}/>
               <div className="container-fluid">
                 <CreatePost/>
                 <hr></hr>
