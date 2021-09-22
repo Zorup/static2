@@ -14,9 +14,21 @@ import Popper from 'popper.js';
 
 import './styles/scss/sb-admin-2.scss';
 
+import {createStore} from 'redux';
+import { persistStore } from 'redux-persist';
+import {Provider} from 'react-redux'
+import { PersistGate } from 'redux-persist/integration/react';
+import rootReducer from './module';
+
+const store = createStore(rootReducer);
+const persistor = persistStore(store);
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <Provider store={store}>
+      <PersistGate persistor={persistor}>
+        <App />
+      </PersistGate>
+    </Provider>
   </React.StrictMode>,
   document.getElementById('root')
 );

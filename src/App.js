@@ -5,15 +5,20 @@ import axios from 'axios';
 import GroupPage from './pages/GroupPage';
 import LoginPage from './pages/LoginPage';
 
-function App() {
-  const [isLogin, setIsLogin] = useState(false);
-  const [loginUser, setLoginUser] = useState({});
-  
-  useEffect(() => {
-    setIsLogin(sessionStorage.getItem('login') === 'true')
-  }, [])
+import {connect} from 'react-redux';
 
+function App({isLogin}) {
   return isLogin? <GroupPage/> : <LoginPage/>
 }
 
-export default App;
+const mapStateToProps = state => ({
+  isLogin: state.checkLogin.isLogin
+});
+
+const mapDispatchToProps = dispatch => ({
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(App)

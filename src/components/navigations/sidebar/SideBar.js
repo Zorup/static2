@@ -6,7 +6,6 @@ function SideBar({toggle, setToggle}){
         setToggle(!toggle);
     };
 
-    console.log(!toggle);
     return(
         <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
             <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">

@@ -1,7 +1,10 @@
 import React, { useState, useCallback } from 'react';
 import axios from 'axios';
 
-function LoginPage(){
+import {connect} from 'react-redux';
+import {logIn} from '../module/login'
+
+function LoginPage({logIn}){
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
@@ -10,14 +13,14 @@ function LoginPage(){
 
     const signIn = async ()=>{
         try{
-            await axios.post(
+            const response = await axios.post(
               'http://localhost:8081/main/v1/login',{
                 loginId: userId,
                 password: password
-              }
+              },
+              {withCredentials: true}
             );
-            sessionStorage.setItem('login', 'true');
-            window.location.reload();
+            logIn(response.data.data);
           }catch(e){
               alert("login 실패");
           }
@@ -73,4 +76,14 @@ function LoginPage(){
     )
 }
 
-export default LoginPage
+const mapStateToProps = state => ({});
+const mapDispatchToProps = dispatch => ({
+    logIn: (data)=>{
+        dispatch(logIn(data));
+    }
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(LoginPage)
