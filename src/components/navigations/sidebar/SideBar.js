@@ -1,11 +1,32 @@
 import './SideBar.css'
-import React, { useState, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
+import axios from 'axios';
+import ForumButton from './ForumButton';
 
-function SideBar({toggle, setToggle}){
+function SideBar({toggle, setToggle, setForum}){
+    const [forumList, setForumList] = useState([]);
+
     const controlParentToggle = () =>{
         setToggle(!toggle);
     };
+
+    useEffect(()=>{
+        const fetchForumList = async()=>{
+          try{
+            const response = await axios.get(
+              `http://localhost:8081/main/v1/forum`
+            );
+            setForumList(response.data.forumList);
+          }catch(e){
+          }
+        };
+        fetchForumList();
+    }, [])
+
+    const forumButtons = forumList.map(item => (
+        <ForumButton forum={item} key={item.forumId} setForum={setForum}/>
+    ));
 
     return(
         <>
@@ -24,6 +45,7 @@ function SideBar({toggle, setToggle}){
 
                 <li className="nav-item" >
                     <div className="forum-list">
+                        {forumButtons}
                     </div>
                 </li>
 

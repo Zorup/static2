@@ -1,6 +1,8 @@
 import './CreatePost.css'
+import {connect} from 'react-redux';
 
-function CreatePost(){
+function CreatePost({forumId, groupId, loginUserInfo}){
+    
     return(
     <div className="container">
         <div className="d-flex  row">
@@ -10,14 +12,12 @@ function CreatePost(){
                         <div className="d-flex flex-row user-info">
                             <img className="rounded-circle" src="/img/undraw_profile.svg" width="30" height="30"></img>
                             <div className="d-flex flex-column justify-content-start ml-2">
-                                <span className="d-block font-weight-bold name login-user-name"></span>
+                                <span className="d-block font-weight-bold name login-user-name"> {loginUserInfo.name}</span>
                             </div>
                         </div>
                         
                         <form id="post-write-form" className="mt-10">
                             <div className="d-flex flex-row align-items-start">
-                                <input className="current-forum-id" name='forumId' className="hideElement"></input>
-                                <input name='groupId' className="hideElement"></input>
                                 <textarea name ='content' className="form-control ml-1 shadow-none textarea" placeholder="게시글 내용을 입력하세요."></textarea>
                             </div>
                             <div className="mt-2 text-right">
@@ -32,4 +32,12 @@ function CreatePost(){
     )
 }
 
-export default CreatePost
+
+const mapStateToProps = state => ({
+    loginUserInfo: state.checkLogin.loginUserInfo
+});
+
+const mapDispatchToProps = dispatch => ({
+})
+
+export default connect(mapStateToProps, mapDispatchToProps)(CreatePost)

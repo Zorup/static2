@@ -10,7 +10,7 @@ function GroupPage() {
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
-    const [userInformation, setUserInformation] = useState({});
+    const [groupId, setGroupId] = useState(1);
 
     const controlSideBar = (state) => {
       setToggle(state);
@@ -26,19 +26,8 @@ function GroupPage() {
         }catch(e){
         }
       };
-
-      const fetchUserInfo = async()=>{
-        try{
-          const response = await axios.get(
-            'http://localhost:8081/main/v1/user-info'
-          );
-          setUserInformation(response.data);
-        }catch(e){
-        }
-      };
-
       fetchPosts();
-    },[])
+    }, [forumId])
 
     const postList = posts.map(item =>(
         <Post post={item} key={item.postId}/>
@@ -46,13 +35,13 @@ function GroupPage() {
 
     return (
       <div id="wrapper">
-        <SideBar toggle={toggle} setToggle={controlSideBar}/>
+        <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId}/>
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
               <TopBar toggle={toggle} setToggle={controlSideBar}/>
               <div className="container-fluid">
-                <CreatePost/>
+                <CreatePost forumId={forumId} groupId={groupId}/>
                 <hr></hr>
                 <div className="container">
                   <div className="d-flex row">
