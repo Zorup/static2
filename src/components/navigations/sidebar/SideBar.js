@@ -68,7 +68,6 @@ function SideBar({toggle, setToggle, setForum}){
                     </div>
                 </li>
 
-
                 {/** 사이드바 토글 */}
                 <hr className="sidebar-divider d-none d-md-block"></hr>
                 <div className="text-center d-none d-md-inline">
@@ -76,7 +75,7 @@ function SideBar({toggle, setToggle, setForum}){
                 </div>
             </ul>
 
-            <CreatGroupModal/>
+            <CreatGroupModal forumList={forumList} setForumList={setForumList}/>
             <DeleteGroupModal/>
         </>
     )

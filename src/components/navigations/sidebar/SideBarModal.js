@@ -1,4 +1,32 @@
-export function CreatGroupModal(){
+import axios from 'axios';
+import { useState, useCallback } from 'react';
+import jQuery from 'jquery';
+import $ from 'jquery';
+
+export function CreatGroupModal({forumList, setForumList}){
+
+    const [forumName, setForumName] = useState("");
+    const onChangeForumName = useCallback (e=>setForumName(e.target.value), []);
+    console.log(forumList);
+    const createForum = async()=>{
+        try{
+            const response = await axios.post(
+                `http://localhost:8081/main/v1/forum?forumName=${forumName}`,
+                null,
+                {
+                    withCredentials: true
+                }
+            );
+            setForumName("");
+            setForumList([
+                ...forumList,
+                response.data.data
+            ]);
+            $('#subGroup').modal('hide');
+        }catch(e){
+        }
+    }
+    
     return(
         <div className="modal fade" id="subGroup" tabIndex="-1" role="dialog" aria-labelledby="ModalLabel"
             aria-hidden="true">
@@ -11,11 +39,12 @@ export function CreatGroupModal(){
                         </button>
                     </div>
                     <input type="text" className="form-control form-control-user modalInput"
-                            id="InputForumName"
+                            value={forumName}
+                            onChange={onChangeForumName}
                             placeholder="그룹명을 입력해주세요. "/>
                     <div className="modal-footer">
                         <button className="btn btn-secondary" type="button" data-dismiss="modal">취소</button>
-                        <a className="btn btn-primary"> 추가</a>
+                        <a className="btn btn-primary" onClick={createForum}> 추가</a>
                     </div>
                 </div>
             </div>

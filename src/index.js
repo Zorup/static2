@@ -9,10 +9,6 @@ import 'bootstrap/dist/js/bootstrap.bundle.min.js';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "bootstrap/dist/js/bootstrap.min.js";
 
-import jQuery from 'jquery';
-import $ from 'jquery';
-import Popper from 'popper.js';
-
 import './styles/scss/sb-admin-2.scss';
 
 import {createStore} from 'redux';
