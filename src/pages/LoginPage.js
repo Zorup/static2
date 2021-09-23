@@ -12,13 +12,20 @@ function LoginPage({logIn}){
     const onChangePassword = useCallback (e=>setPassword(e.target.value), []);
 
     const signIn = async ()=>{
+        const params = new URLSearchParams();
+        params.append('loginId', userId);
+        params.append('password', password);
+        
         try{
             const response = await axios.post(
-              'http://localhost:8081/main/v1/login',{
-                loginId: userId,
-                password: password
-              },
-              {withCredentials: true}
+              'http://localhost:8081/main/v1/login', 
+              params,
+              {
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                withCredentials: true
+              }
             );
             logIn(response.data.data);
           }catch(e){
