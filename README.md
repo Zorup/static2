@@ -74,3 +74,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 https://react.vlpt.us/integrate-api/01-basic.html
 
 https://medium.com/hackernoon/state-management-with-redux-50f3ec10c10a
+
+https://pro-self-studier.tistory.com/40
