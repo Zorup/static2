@@ -7,6 +7,7 @@ import axios from 'axios';
 
 
 function GroupPage() {
+    const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
     const [userInformation, setUserInformation] = useState({});
@@ -19,7 +20,7 @@ function GroupPage() {
       const fetchPosts = async()=>{
         try{
           const response = await axios.get(
-            'http://localhost:8081/main/v1/forum/1/postview'
+            `http://localhost:8081/main/v1/forum/${forumId}/postview`
           );
           setPosts(response.data.list);
         }catch(e){
