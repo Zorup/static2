@@ -10,12 +10,12 @@ function GroupPage() {
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
-    const [groupId, setGroupId] = useState(1);
+    const [groupId] = useState(1);
 
     const controlSideBar = (state) => {
       setToggle(state);
     };
-
+    
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
@@ -41,7 +41,7 @@ function GroupPage() {
           <div id="content">
               <TopBar toggle={toggle} setToggle={controlSideBar}/>
               <div className="container-fluid">
-                <CreatePost forumId={forumId} groupId={groupId}/>
+                <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
                 <hr></hr>
                 <div className="container">
                   <div className="d-flex row">

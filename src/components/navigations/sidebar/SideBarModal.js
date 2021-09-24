@@ -1,6 +1,5 @@
 import axios from 'axios';
 import { useState, useCallback } from 'react';
-import jQuery from 'jquery';
 import $ from 'jquery';
 
 export function CreatGroupModal({forumList, setForumList}){
