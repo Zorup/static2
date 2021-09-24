@@ -76,7 +76,7 @@ function SideBar({toggle, setToggle, setForum}){
             </ul>
 
             <CreatGroupModal forumList={forumList} setForumList={setForumList}/>
-            <DeleteGroupModal/>
+            <DeleteGroupModal forumList={forumList} setForumList={setForumList}/>
         </>
     )
 }
