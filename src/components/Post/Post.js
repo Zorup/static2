@@ -4,12 +4,13 @@ import axios from 'axios';
 import {useState, useEffect} from "react"
 
 function Post({post}){
-    const commentList = post.comments.map(item => (
+    const [likes, setLikes] = useState(post.likes);
+    const [comments, setComments] = useState(post.comments);
+
+    const commentList = comments.map(item => (
         <Comment comment={item} key={item.commentId}/>
     ));
-
-    const [likes, setLikes] = useState(post.likes);
-
+    
     const clickLikeHandler = async()=>{
         try{
             const response = await axios.post(
@@ -54,7 +55,7 @@ function Post({post}){
                 </div>
             </div>
             {commentList}
-            <CreateComment/>
+            <CreateComment postId={post.postId} comments={comments} setComments={setComments}/>
         </>
     )
 
