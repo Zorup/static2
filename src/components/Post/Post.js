@@ -1,9 +1,9 @@
 import CreateComment from "./CreateComment";
 import Comment from "./Comment";
 import axios from 'axios';
-import {useState, useEffect} from "react"
+import {useState} from "react"
 
-function Post({post}){
+function Post({post, pushTargetUsers}){
     const [likes, setLikes] = useState(post.likes);
     const [comments, setComments] = useState(post.comments);
 
@@ -55,7 +55,7 @@ function Post({post}){
                 </div>
             </div>
             {commentList}
-            <CreateComment postId={post.postId} comments={comments} setComments={setComments}/>
+            <CreateComment postId={post.postId} comments={comments} setComments={setComments} pushTargetUsers={pushTargetUsers}/>
         </>
     )
 }

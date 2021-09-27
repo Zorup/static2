@@ -1,11 +1,12 @@
 import './CreatePost.css'
 import axios from 'axios';
 import {useState, useCallback} from "react"
+import {getNotiRequestData, UserInformation} from "../../module/mention"
+import {connect} from 'react-redux';
 
-function CreateComment({postId, comments, setComments}){
+function CreateComment({postId, comments, setComments, pushTargetUsers, sender}){
     const [content, setContent] = useState("");
     const onChangeContent = useCallback (e=>setContent(e.target.value), []);
-
     const clickLikeHandler = async()=>{
         const params = new URLSearchParams();
         params.append('postId', postId);
@@ -26,6 +27,22 @@ function CreateComment({postId, comments, setComments}){
             const newComments = [...comments];
             newComments.push(response.data.data);
             setComments(newComments);
+            
+            //멘션이 존재하는 경우 푸쉬 알람을 보내는 로직
+            if(pushTargetUsers.hasOwnProperty(postId)){
+                let pushRequestData = getNotiRequestData(new UserInformation(sender.userId, sender.name), 
+                                                        pushTargetUsers, postId, true);
+                
+                const notiResposne = await axios.post(
+                    `http://localhost:8081/fcm/v1/fcm-msg`,
+                    pushRequestData,
+                    {
+                        withCredentials: true
+                    }
+                );
+                console.log("noti!");
+                delete pushTargetUsers[postId];
+            }
         }catch(e){
         }
     }
@@ -52,4 +69,14 @@ function CreateComment({postId, comments, setComments}){
     )
 }
 
-export default CreateComment
+const mapStateToProps = state => ({
+    sender: state.checkLogin.loginUserInfo
+});
+
+const mapDispatchToProps = dispatch => ({
+})
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(CreateComment)

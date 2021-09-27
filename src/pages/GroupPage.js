@@ -43,7 +43,7 @@ function GroupPage() {
           if(!pushTargetUsers[currentPostId].has(userId)) {
             pushTargetUsers[currentPostId].add(new UserInformation(userId, userInfoArr[0]));
           }
-          console.log(pushTargetUsers); //차후 삭제
+          console.log(pushTargetUsers);
         }
       });
     });
@@ -75,7 +75,7 @@ function GroupPage() {
     }, [forumId])
 
     const postList = posts.map(item =>(
-        <Post post={item} key={item.postId}/>
+        <Post post={item} key={item.postId} pushTargetUsers={pushTargetUsers}/>
     ));
 
     return (
