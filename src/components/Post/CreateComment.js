@@ -33,7 +33,7 @@ function CreateComment({postId, comments, setComments}){
     return(
         <div className="p-2 InputComment">
             <form className="comment-write-form">
-                <div className="d-flex flex-row align-items-start">
+                <div className="d-flex flex-row align-items-start" data-id={postId}>
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="40"></img>
                     <textarea name ='content' 
                               className="form-control ml-1 shadow-none textarea comment-input" 

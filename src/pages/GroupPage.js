@@ -2,41 +2,64 @@ import TopBar from '../components/navigations/topbar/TopBar';
 import SideBar from '../components/navigations/sidebar/SideBar';
 import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
+import {UserInformation, DeepUserInfoSet} from '../module/mention'
+
 import React, { useState, useEffect } from 'react';
+
 import axios from 'axios';
 import $ from 'jquery';
-require('./bootstrap-suggest-master/dist/bootstrap-suggest')
+require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
 function GroupPage() {
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
     const [groupId] = useState(1);
+    const [userList, setUserList] = useState([]);
+    const pushTargetUsers = {};
 
     const controlSideBar = (state) => {
       setToggle(state);
     };
     
     useEffect(()=>{
-      let users = [
-        {username: 'lodev09', fullname: 'Jovanni Lo'},
-        {username: 'foo', fullname: 'Foo User'},
-        {username: 'bar', fullname: 'Bar User'},
-        {username: 'twbs', fullname: 'Twitter Bootstrap'},
-        {username: 'john', fullname: 'John Doe'},
-        {username: 'jane', fullname: 'Jane Doe'},
-      ];
-
-      console.log($('.comment-input').suggest('@', {
-        data: users,
+      $('.comment-input').suggest('@', {
+        data: userList,
         map: function(user) {
           return {
-            value: user.username,
-            text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
+            value: user.name,
+            text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small> <small hidden>'+user.userId+'</small>'
           }
+        },
+
+        onselect: function (e, item){
+          const userInfoArr = item.text.split(" ");
+          const currentPostId = e.$element.parent().data("id");
+          const userId = Number.parseInt(userInfoArr[2]);
+          
+          if(!pushTargetUsers.hasOwnProperty(currentPostId)) {
+            pushTargetUsers[currentPostId] = new DeepUserInfoSet();
+          }
+          if(!pushTargetUsers[currentPostId].has(userId)) {
+            pushTargetUsers[currentPostId].add(new UserInformation(userId, userInfoArr[0]));
+          }
+          console.log(pushTargetUsers); //차후 삭제
         }
-      }));
+      });
     });
+
+    useEffect(()=>{
+      const fetchUserLists = async()=>{
+      try{
+          const response = await axios.get(
+            'http://localhost:8081/main/v1/group/users'
+          );
+          setUserList(response.data.list);
+        }catch(e){
+        }
+      }
+      fetchUserLists();
+    }, [])
 
     useEffect(()=>{
       const fetchPosts = async()=>{
@@ -56,7 +79,6 @@ function GroupPage() {
     ));
 
     return (
-      
       <div id="wrapper">
         <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId}/>
   
