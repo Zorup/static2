@@ -1,17 +1,17 @@
 import './CreatePost.css'
 import axios from 'axios';
-import {useState, useCallback} from "react"
+import {useRef} from "react"
 import {getNotiRequestData, UserInformation} from "../../module/mention"
 import {connect} from 'react-redux';
 
 function CreateComment({postId, comments, setComments, pushTargetUsers, sender}){
-    const [content, setContent] = useState("");
-    const onChangeContent = useCallback (e=>setContent(e.target.value), []);
+    const textAreaRef = useRef();
     const clickLikeHandler = async()=>{
         const params = new URLSearchParams();
         params.append('postId', postId);
-        params.append('content', content);
-    
+        params.append('content', textAreaRef.current.value);
+        console.log(textAreaRef.current.value);
+        
         try{
             const response = await axios.post(
                 `http://localhost:8081/main/v1/comment`,
@@ -23,7 +23,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
                     withCredentials: true
                 }
             );
-            setContent("");
+            textAreaRef.current.value="";
             const newComments = [...comments];
             newComments.push(response.data.data);
             setComments(newComments);
@@ -52,11 +52,10 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
             <form className="comment-write-form">
                 <div className="d-flex flex-row align-items-start" data-id={postId}>
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="40"></img>
-                    <textarea name ='content' 
+                    <textarea ref={textAreaRef}
+                              name ='content' 
                               className="form-control ml-1 shadow-none textarea comment-input" 
-                              placeholder="덧글을 입력하세요."
-                              value={content}
-                              onChange={onChangeContent}></textarea>
+                              placeholder="덧글을 입력하세요."></textarea>
                 </div>
                 <div className="mt-2 text-right">
                     <button className="btn btn-primary btn-sm shadow-none" 

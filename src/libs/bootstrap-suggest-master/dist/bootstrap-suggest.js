@@ -322,7 +322,6 @@ import jQuery from 'jquery'
             }
 
             $el.trigger($.extend({type: 'suggest.select'}, this), item);
-
             this.hide();
         },
 
