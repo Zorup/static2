@@ -58,7 +58,6 @@ function Post({post}){
             <CreateComment postId={post.postId} comments={comments} setComments={setComments}/>
         </>
     )
-
 }
 
 export default Post

@@ -2,7 +2,6 @@ import './CreatePost.css'
 import axios from 'axios';
 import {useState, useCallback} from "react"
 
-
 function CreateComment({postId, comments, setComments}){
     const [content, setContent] = useState("");
     const onChangeContent = useCallback (e=>setContent(e.target.value), []);
@@ -11,7 +10,7 @@ function CreateComment({postId, comments, setComments}){
         const params = new URLSearchParams();
         params.append('postId', postId);
         params.append('content', content);
-
+    
         try{
             const response = await axios.post(
                 `http://localhost:8081/main/v1/comment`,
@@ -36,8 +35,6 @@ function CreateComment({postId, comments, setComments}){
             <form className="comment-write-form">
                 <div className="d-flex flex-row align-items-start">
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="40"></img>
-                    <input className="current-post-id hideElement" name='postId'></input>
-                    <input className="current-forum-id hideElement" name='forumId'></input>
                     <textarea name ='content' 
                               className="form-control ml-1 shadow-none textarea comment-input" 
                               placeholder="덧글을 입력하세요."

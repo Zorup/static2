@@ -4,7 +4,8 @@ import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-
+import $ from 'jquery';
+require('./bootstrap-suggest-master/dist/bootstrap-suggest')
 
 function GroupPage() {
     const [forumId, setForumId] = useState(1);
@@ -16,6 +17,27 @@ function GroupPage() {
       setToggle(state);
     };
     
+    useEffect(()=>{
+      let users = [
+        {username: 'lodev09', fullname: 'Jovanni Lo'},
+        {username: 'foo', fullname: 'Foo User'},
+        {username: 'bar', fullname: 'Bar User'},
+        {username: 'twbs', fullname: 'Twitter Bootstrap'},
+        {username: 'john', fullname: 'John Doe'},
+        {username: 'jane', fullname: 'Jane Doe'},
+      ];
+
+      console.log($('.comment-input').suggest('@', {
+        data: users,
+        map: function(user) {
+          return {
+            value: user.username,
+            text: '<strong>'+user.username+'</strong> <small>'+user.fullname+'</small>'
+          }
+        }
+      }));
+    });
+
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
@@ -34,6 +56,7 @@ function GroupPage() {
     ));
 
     return (
+      
       <div id="wrapper">
         <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId}/>
   
@@ -54,8 +77,7 @@ function GroupPage() {
                 </div>
               </div>
           </div>
-  
-  
+
           <footer className="sticky-footer bg-white">
                   <div className="container my-auto">
                       <div className="copyright text-center my-auto">

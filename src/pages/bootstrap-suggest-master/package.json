@@ -1,0 +1,43 @@
+{
+  "name": "bootstrap-suggest",
+  "version": "2.1.0",
+  "description": "A bootstrap plugin for your mention needs.",
+  "style": "dist/bootstrap-suggest.css",
+  "sass": "src/bootstrap-suggest.scss",
+  "main": "dist/bootstrap-suggest.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/lodev09/bootstrap-suggest.git"
+  },
+  "keywords": [
+    "bootstrap",
+    "tags",
+    "jquery-plugin",
+    "suggest",
+    "metions"
+  ],
+  "author": "Jovanni Lo (lodev09@gmail.com)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/lodev09/bootstrap-suggest/issues"
+  },
+  "homepage": "https://github.com/lodev09/bootstrap-suggest#readme",
+  "dependencies": {
+    "bootstrap": "^4.4.1",
+    "jquery": "^3.4.1",
+    "jquery.caret": "^0.3"
+  },
+  "devDependencies": {
+    "browser-sync": "^2.26.7",
+    "gulp": "^4.0.2",
+    "gulp-autoprefixer": "6.0.0",
+    "gulp-clean-css": "3.10.0",
+    "gulp-header": "2.0.5",
+    "gulp-rename": "1.4.0",
+    "gulp-sass": "4.0.1",
+    "gulp-uglify": "3.0.1"
+  }
+}
