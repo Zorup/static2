@@ -43,7 +43,6 @@ function GroupPage() {
           if(!pushTargetUsers[currentPostId].has(userId)) {
             pushTargetUsers[currentPostId].add(new UserInformation(userId, userInfoArr[0]));
           }
-          console.log(pushTargetUsers);
         }
       });
     });

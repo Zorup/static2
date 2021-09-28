@@ -10,8 +10,6 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
         const params = new URLSearchParams();
         params.append('postId', postId);
         params.append('content', textAreaRef.current.value);
-        console.log(textAreaRef.current.value);
-        
         try{
             const response = await axios.post(
                 `http://localhost:8081/main/v1/comment`,
@@ -33,14 +31,13 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
                 let pushRequestData = getNotiRequestData(new UserInformation(sender.userId, sender.name), 
                                                         pushTargetUsers, postId, true);
                 
-                const notiResposne = await axios.post(
+                await axios.post(
                     `http://localhost:8081/fcm/v1/fcm-msg`,
                     pushRequestData,
                     {
                         withCredentials: true
                     }
                 );
-                console.log("noti!");
                 delete pushTargetUsers[postId];
             }
         }catch(e){
