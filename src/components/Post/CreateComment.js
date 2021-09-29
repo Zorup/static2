@@ -28,6 +28,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
             
             //멘션이 존재하는 경우 푸쉬 알람을 보내는 로직
             if(pushTargetUsers.hasOwnProperty(postId)){
+                console.log("push message!");
                 let pushRequestData = getNotiRequestData(new UserInformation(sender.userId, sender.name), 
                                                         pushTargetUsers, postId, true);
                 
