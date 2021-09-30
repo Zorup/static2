@@ -76,3 +76,5 @@ https://react.vlpt.us/integrate-api/01-basic.html
 https://medium.com/hackernoon/state-management-with-redux-50f3ec10c10a
 
 https://pro-self-studier.tistory.com/40
+
+https://developer.mozilla.org/en-US/docs/Web/API/Broadcast_Channel_API  (컨택스트별 데이터를 공유하기 위한 방안1)
