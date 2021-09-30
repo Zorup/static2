@@ -13,3 +13,15 @@ let firebaseConfig = {
 };
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
+
+//크롬에서만 동작함..
+const channel = new BroadcastChannel('fcm-background');
+
+messaging.onBackgroundMessage((payload) => {
+    /*console.log('백그라운드 메시지 처리', payload);
+    self.registration.showNotification('notiTitle',
+      {body : "테스트"});*/
+
+    //서비스워커에서 채널을 통해 클라이언트로 데이터를 전달함..
+    channel.postMessage(payload);
+  });

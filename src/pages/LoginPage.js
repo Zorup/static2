@@ -3,8 +3,9 @@ import axios from 'axios';
 
 import {connect} from 'react-redux';
 import {logIn} from '../module/login'
+import {getInitMentionByLogin} from '../module/mention'
 
-function LoginPage({logIn}){
+function LoginPage({logIn, setUserMentionAlert}){
     const [userId, setUserId] = useState('');
     const [password, setPassword] = useState('');
 
@@ -27,6 +28,15 @@ function LoginPage({logIn}){
                 withCredentials: true
               }
             );
+            
+            //로그인 시 초기 알람 화면과 관련된 리스트, 유저 정보를 가져와서 세션 스토리지에 넣는다.
+            const mentionRequest = await axios.get(
+                `http://localhost:8081/fcm/v1/user/${response.data.data.userId}/mentions`, 
+                null, {
+                    withCredentials: true
+                }
+            );
+            setUserMentionAlert(mentionRequest.data);
             logIn(response.data.data);
           }catch(e){
               alert("login 실패");
@@ -87,6 +97,9 @@ const mapStateToProps = state => ({});
 const mapDispatchToProps = dispatch => ({
     logIn: (data)=>{
         dispatch(logIn(data));
+    },
+    setUserMentionAlert: (data)=>{
+        dispatch(getInitMentionByLogin(data));
     }
 })
 

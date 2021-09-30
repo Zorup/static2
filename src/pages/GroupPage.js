@@ -3,7 +3,7 @@ import SideBar from '../components/navigations/sidebar/SideBar';
 import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
-
+import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
 
 import axios from 'axios';
@@ -11,6 +11,7 @@ import $ from 'jquery';
 require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
 function GroupPage() {
+    
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);

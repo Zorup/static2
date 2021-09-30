@@ -1,3 +1,5 @@
+import axios from "axios";
+// 멘션 관련 자료 구조 
 export class UserInformation{
     constructor(userId, userName){
         if(!Number.isInteger(userId)){
@@ -47,3 +49,32 @@ export const getNotiRequestData = (sender, pushTargetUsers, currentTargetId, eve
     }
     return pushRequestData;
 };
+
+// Top Bar에서 활용될 리듀서 관련 정보들
+const LOG_IN = 'MENTION/LOG_IN' //로그인 시 해당 사용자의 ID로 데이터를 받아옴.
+const ON_MESSAGE = 'ON_MESSAGE'
+
+export const getInitMentionByLogin = (data) => ({type: LOG_IN, mentionList : data});
+export const getMentionByFcm = (senderId) => ({type: ON_MESSAGE, sender: senderId});
+
+const initialState = {
+    mentionAlertList : [],
+};
+
+function mentionDispatcher(state = initialState, action){
+    switch(action.type){
+        case LOG_IN:
+            return{
+                ...initialState,
+                mentionAlertList: action.mentionList
+            };
+        case ON_MESSAGE:
+            return{
+                ...state,
+            };
+        default:
+            return state;
+    }
+}
+
+export default mentionDispatcher;

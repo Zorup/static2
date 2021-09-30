@@ -48,7 +48,7 @@ function Post({post, pushTargetUsers}){
                         </a>
                         <a className="p-2 ">
                             <i className="fa fa-comment"></i>
-                            <span>{post.comments.length}</span>
+                            <span>{comments.length}</span>
                             <span className="ml-1">Comment</span>
                         </a>
                     </div>

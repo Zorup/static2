@@ -16,22 +16,29 @@ const firebaseConfig = {
   appId: "1:831418413127:web:d4fc457e510db7556cc162",
   measurementId: "G-6YP6W2WJ89"
 };
-//initializeApp(firebaseConfig);
+
+//initialize fcm app
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
+
+//ForeGround 메세지 처리 
 messaging.onMessage(payload => {
   console.log(payload.data);
 });
 
-function App({isLogin, loginUserInfo}) {
+//백그라운드시 메세지 처리
+const channel = new BroadcastChannel('fcm-background');
+channel.addEventListener('message', event => {
+  console.log('Received', event.data);
+});
 
+function App({isLogin, loginUserInfo}) {
   useEffect(()=>{
     if(isLogin){
-      console.log(loginUserInfo.userId+ "token save api call..");
       messaging.getToken().then((currentToken)=>{
         console.log(currentToken);
         if(currentToken){
-          const response = axios.patch(
+          axios.patch(
             `http://localhost:8081/main/v1/user/${loginUserInfo.userId}?push-token=${currentToken}`, 
             null,
             {

@@ -2,8 +2,9 @@ import React, {useState} from 'react'
 import SearchBar from './SearchBar'
 import Notification from './Notification'
 import UserInformation from './UserInformation'
+import {connect} from 'react-redux';
 
-function TopBar({toggle, setToggle}){
+function TopBar({toggle, setToggle, mentionList}){
     const controlParentToggle = () =>{
         setToggle(!toggle);
     };
@@ -16,7 +17,7 @@ function TopBar({toggle, setToggle}){
             <SearchBar/>
 
             <ul className="navbar-nav ml-auto">
-                <Notification section="Alerts Center" icon="fa-bell"/>
+                <Notification section="Alerts Center" dropDownList={mentionList} icon="fa-bell"/>
                 <Notification section="Message Center" icon="fa-envelope"/>
                 <div className="topbar-divider d-none d-sm-block"></div>
                 <UserInformation/>
@@ -25,4 +26,13 @@ function TopBar({toggle, setToggle}){
     )
 }
 
-export default TopBar
+const mapStateToProps = state => ({
+    mentionList: state.mentionDispatcher.mentionAlertList,
+});
+const mapDispatchToProps = dispatch => ({
+});
+
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(TopBar)
