@@ -69,6 +69,7 @@ function mentionDispatcher(state = initialState, action){
                 mentionAlertList: action.mentionList
             };
         case ON_MESSAGE:
+            console.log("reducer call");
             const newData = [...state.mentionAlertList];
             newData.push(action.data);
             return{

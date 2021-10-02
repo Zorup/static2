@@ -26,6 +26,7 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
   useEffect(()=>{
     //ForeGround 메세지 처리 
     messaging.onMessage(payload => {
+      //공통 함수 만들어서 처리할 것. 
       let data = payload.data;
       data.createDate = JSON.parse(data.createDate);
       data.notificationId = parseInt(data.notificationId);
@@ -39,6 +40,8 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
     channel.addEventListener('message', event => {
       let data = event.data.data;
       data.createDate = JSON.parse(data.createDate);
+      data.notificationId = parseInt(data.notificationId);
+      data.readYn = (data.readYn === 'true');
       console.log("back Ground..");
       setFcmAlert(data);
     });
@@ -47,7 +50,6 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
   useEffect(()=>{
     if(isLogin){
       messaging.getToken().then((currentToken)=>{
-        console.log(currentToken);
         if(currentToken){
           axios.patch(
             `http://localhost:8081/main/v1/user/${loginUserInfo.userId}?push-token=${currentToken}`, 

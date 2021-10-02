@@ -4,7 +4,7 @@ import React, { useState, useEffect } from 'react';
 
 function Notification({section, icon, dropDownList}){
     const [dropDownItems, setDropDownItems] = useState([]);
-    let len = dropDownItems.filter(item=> item.readYn === false).length;
+    const [notRead, setNotReadValue] = useState(0);
     let dropDowns = dropDownItems.map(item => (
             <NotificationDropDown item={item} key={item.notificationId}/>
     ));
@@ -12,15 +12,16 @@ function Notification({section, icon, dropDownList}){
     useEffect(()=>{
         if(dropDownList !== undefined){
             setDropDownItems(dropDownList);
+            setNotReadValue(dropDownList.filter(item => item.readYn === false).length);
         }   
-    });
-    
+    },[dropDownList]);
+
     return(
         <li className="nav-item dropdown no-arrow mx-1">
             <a className="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"
                 data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                 <i className={`fas ${icon} fa-fw`}></i>
-                <span className="badge badge-danger badge-counter">{len}+</span>
+                <span className="badge badge-danger badge-counter">{notRead}+</span>
             </a>
             
             {/** 드롭다운 리스트 목록 */}
