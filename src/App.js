@@ -3,6 +3,7 @@ import axios from 'axios';
 import GroupPage from './pages/GroupPage';
 import LoginPage from './pages/LoginPage';
 import {connect} from 'react-redux';
+import {getMentionByFcm} from './module/mention'
 import {useEffect} from "react"
 import firebase from 'firebase/app'
 import 'firebase/messaging'
@@ -21,18 +22,28 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 const messaging = firebase.messaging();
 
-//ForeGround 메세지 처리 
-messaging.onMessage(payload => {
-  console.log(payload.data);
-});
+function App({isLogin, loginUserInfo, setFcmAlert}) {
+  useEffect(()=>{
+    //ForeGround 메세지 처리 
+    messaging.onMessage(payload => {
+      let data = payload.data;
+      data.createDate = JSON.parse(data.createDate);
+      data.notificationId = parseInt(data.notificationId);
+      data.readYn = (data.readYn === 'true');
+      console.log("ForeGroud");
+      setFcmAlert(data);
+    });
 
-//백그라운드시 메세지 처리
-const channel = new BroadcastChannel('fcm-background');
-channel.addEventListener('message', event => {
-  console.log('Received', event.data);
-});
+    //백그라운드시 메세지 처리
+    const channel = new BroadcastChannel('fcm-background');
+    channel.addEventListener('message', event => {
+      let data = event.data.data;
+      data.createDate = JSON.parse(data.createDate);
+      console.log("back Ground..");
+      setFcmAlert(data);
+    });
+  },[setFcmAlert]);
 
-function App({isLogin, loginUserInfo}) {
   useEffect(()=>{
     if(isLogin){
       messaging.getToken().then((currentToken)=>{
@@ -52,15 +63,18 @@ function App({isLogin, loginUserInfo}) {
     }
   }, [isLogin, loginUserInfo.userId]);
   
-  return isLogin? <GroupPage/> : <LoginPage/>
+  return isLogin? <GroupPage /> : <LoginPage/>
 }
 
 const mapStateToProps = state => ({
   isLogin: state.checkLogin.isLogin,
-  loginUserInfo: state.checkLogin.loginUserInfo
+  loginUserInfo: state.checkLogin.loginUserInfo,
 });
 
 const mapDispatchToProps = dispatch => ({
+  setFcmAlert: (data)=>{
+    dispatch(getMentionByFcm(data));
+  }
 });
 
 export default connect(

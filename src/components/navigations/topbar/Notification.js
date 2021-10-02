@@ -1,15 +1,20 @@
 import NotificationDropDown from "./NotificationDropDown"
 import './Notification.css'
+import React, { useState, useEffect } from 'react';
+
 function Notification({section, icon, dropDownList}){
-    console.log(dropDownList);
-    let len = 0;
-    let dropDowns;
-    if(dropDownList !== undefined){
-        len = dropDownList.filter(item=> item.readYn === false).length;
-        dropDowns = dropDownList.map(item => (
+    const [dropDownItems, setDropDownItems] = useState([]);
+    let len = dropDownItems.filter(item=> item.readYn === false).length;
+    let dropDowns = dropDownItems.map(item => (
             <NotificationDropDown item={item} key={item.notificationId}/>
-        ));
-    }
+    ));
+    
+    useEffect(()=>{
+        if(dropDownList !== undefined){
+            setDropDownItems(dropDownList);
+        }   
+    });
+    
     return(
         <li className="nav-item dropdown no-arrow mx-1">
             <a className="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button"

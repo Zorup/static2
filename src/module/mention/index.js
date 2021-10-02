@@ -55,22 +55,25 @@ const LOG_IN = 'MENTION/LOG_IN' //로그인 시 해당 사용자의 ID로 데이
 const ON_MESSAGE = 'ON_MESSAGE'
 
 export const getInitMentionByLogin = (data) => ({type: LOG_IN, mentionList : data});
-export const getMentionByFcm = (senderId) => ({type: ON_MESSAGE, sender: senderId});
+export const getMentionByFcm = (data) => ({type: ON_MESSAGE, data: data});
 
 const initialState = {
-    mentionAlertList : [],
+    mentionAlertList : []
 };
 
 function mentionDispatcher(state = initialState, action){
     switch(action.type){
         case LOG_IN:
             return{
-                ...initialState,
+                ...state,
                 mentionAlertList: action.mentionList
             };
         case ON_MESSAGE:
+            const newData = [...state.mentionAlertList];
+            newData.push(action.data);
             return{
                 ...state,
+                mentionAlertList: newData
             };
         default:
             return state;

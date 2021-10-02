@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React from 'react'
 import SearchBar from './SearchBar'
 import Notification from './Notification'
 import UserInformation from './UserInformation'
@@ -29,10 +29,7 @@ function TopBar({toggle, setToggle, mentionList}){
 const mapStateToProps = state => ({
     mentionList: state.mentionDispatcher.mentionAlertList,
 });
-const mapDispatchToProps = dispatch => ({
-});
 
 export default connect(
-    mapStateToProps,
-    mapDispatchToProps
+    mapStateToProps
 )(TopBar)
