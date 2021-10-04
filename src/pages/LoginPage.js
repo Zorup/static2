@@ -11,6 +11,7 @@ function LoginPage({logIn, setUserMentionAlert}){
 
     const onChagneUserId = useCallback (e=>setUserId(e.target.value), []);
     const onChangePassword = useCallback (e=>setPassword(e.target.value), []);
+    const moveSignInPage = useCallback(()=>{window.location.href="/sign-in"},[]);
 
     const signIn = async ()=>{
         const params = {
@@ -77,7 +78,7 @@ function LoginPage({logIn, setUserMentionAlert}){
                                         <button className="small abtn">Forgot Password?</button>
                                     </div>
                                     <div className="text-center">
-                                        <button className="small abtn">Create an Account!</button>
+                                        <button className="small abtn" onClick={moveSignInPage}>Create an Account!</button>
                                     </div>
                                 </div>
                             </div>

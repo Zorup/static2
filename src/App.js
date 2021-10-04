@@ -2,9 +2,13 @@ import './App.css';
 import axios from 'axios';
 import GroupPage from './pages/GroupPage';
 import LoginPage from './pages/LoginPage';
+import SignInPage from './pages/SignInPage';
+import ErrorPage from './pages/ErrorPage';
 import {connect} from 'react-redux';
 import {getMentionByFcm} from './module/mention'
 import {useEffect} from "react"
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+
 import firebase from 'firebase/app'
 import 'firebase/messaging'
 
@@ -65,8 +69,20 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
       });
     }
   }, [isLogin, loginUserInfo.userId]);
-  
-  return isLogin? <GroupPage /> : <LoginPage/>
+  //render={() => <Education education={data} />}/>
+  return (
+    <Router>
+      <Switch>
+        { 
+          isLogin ? 
+          <Route exact path='/' component={ GroupPage }  /> :
+          <Route exact path='/' component={ LoginPage } />  
+        }
+        <Route exact path='/sign-in' component={SignInPage}/>  
+        <Route component={ ErrorPage } />
+      </Switch>
+    </Router>
+  )
 }
 
 const mapStateToProps = state => ({
