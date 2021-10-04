@@ -52,7 +52,8 @@ function GroupPage() {
       const fetchUserLists = async()=>{
       try{
           const response = await axios.get(
-            'http://localhost:8081/main/v1/group/users'
+            'http://localhost:8081/main/v1/group/users',
+            {withCredentials: true}
           );
           setUserList(response.data.list);
         }catch(e){
@@ -65,7 +66,8 @@ function GroupPage() {
       const fetchPosts = async()=>{
         try{
           const response = await axios.get(
-            `http://localhost:8081/main/v1/forum/${forumId}/postview`
+            `http://localhost:8081/main/v1/forum/${forumId}/postview`,
+            { withCredentials: true }
           );
           setPosts(response.data.list);
         }catch(e){

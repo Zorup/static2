@@ -31,7 +31,7 @@ function LoginPage({logIn, setUserMentionAlert}){
             //로그인 시 초기 알람 화면과 관련된 리스트, 유저 정보를 가져와서 세션 스토리지에 넣는다.
             const mentionRequest = await axios.get(
                 `http://localhost:8081/fcm/v1/user/${response.data.data.userId}/mentions`, 
-                null, {
+                {
                     withCredentials: true
                 }
             );

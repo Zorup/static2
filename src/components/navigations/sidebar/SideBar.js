@@ -15,7 +15,8 @@ function SideBar({toggle, setToggle, setForum}){
         const fetchForumList = async()=>{
           try{
             const response = await axios.get(
-              `http://localhost:8081/main/v1/forum`
+              `http://localhost:8081/main/v1/forum`,
+              { withCredentials: true }
             );
             setForumList(response.data.forumList);
           }catch(e){

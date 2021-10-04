@@ -11,7 +11,11 @@ function NotificationDropDown({item, clickRender}){
         e.stopPropagation();
         try{
             if(!readYn){
-                await axios.patch(`http://localhost:8081/fcm/v1/notification/${item.notificationId}`);
+                await axios.patch(
+                    `http://localhost:8081/fcm/v1/notification/${item.notificationId}`,
+                    null,
+                    { withCredentials: true }
+                );
                 clickRender(item.notificationId);
                 setReadYn(true);
             }
