@@ -41,10 +41,10 @@ function Post({post, pushTargetUsers}){
 
                 <div className="bg-white">
                     <div className="d-flex flex-row fs-12">
-                        <a className="p-2 like-button">
+                        <a className="p-2 like-button" onClick={clickLikeHandler}>
                             <i className="fa fa-thumbs-up"></i>
                             <span className="testLike">{likes}</span>
-                            <span className="ml-1" onClick={clickLikeHandler}>Like</span>
+                            <span className="ml-1">Like</span>
                         </a>
                         <a className="p-2 ">
                             <i className="fa fa-comment"></i>

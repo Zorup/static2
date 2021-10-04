@@ -1,9 +1,12 @@
-function UserInformation(){
+import {connect} from 'react-redux';
+
+function UserInformation({loginUserInfo}){
+    console.log(loginUserInfo);
     return(
         <li className="nav-item dropdown no-arrow">
             <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
                data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                <span className="mr-2 d-none d-lg-inline text-gray-600 small login-user-name"></span>
+                <span className="mr-2 d-none d-lg-inline text-gray-600 small login-user-name">{loginUserInfo.name}</span>
                 <img className="img-profile rounded-circle"
                      src="img/undraw_profile_1.svg"></img>
             </a>
@@ -31,4 +34,10 @@ function UserInformation(){
     )
 }
 
-export default UserInformation
+const mapStateToProps = state => ({
+    loginUserInfo: state.checkLogin.loginUserInfo,
+  });
+
+export default connect(
+    mapStateToProps
+)(UserInformation)

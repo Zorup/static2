@@ -63,7 +63,6 @@ const initialState = {
 };
 
 function mentionDispatcher(state = initialState, action){
-    console.log("reducer call");
     switch(action.type){
         case LOG_IN:
             return{

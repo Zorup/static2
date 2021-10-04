@@ -68,12 +68,14 @@ export function DeleteGroupModal({forumList, setForumList}){
         try{
             const response = await axios.delete(
                 'http://localhost:8081/main/v1/forum',
-                {data : params},
+                {
+                    data : params,
+                    withCredentials: true
+                },
                 {
                     headers: {
                         'Content-Type': 'application/x-www-form-urlencoded',
                     },
-                    withCredentials: true
                 }
             );
             setForumList(forumList.filter(item=> !deleteTarget.has(item.forumId)));
