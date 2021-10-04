@@ -13,22 +13,21 @@ function LoginPage({logIn, setUserMentionAlert}){
     const onChangePassword = useCallback (e=>setPassword(e.target.value), []);
 
     const signIn = async ()=>{
-        const params = new URLSearchParams();
-        params.append('loginId', userId);
-        params.append('password', password);
-        
+        const params = {
+            loginId: userId,
+            password: password
+        };
+
         try{
             const response = await axios.post(
-              'http://localhost:8081/main/v1/login', 
+              'http://localhost:8081/auth/v1/login', 
               params,
               {
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
                 withCredentials: true
               }
             );
-            
+            console.log("login response info");
+            console.log(response);
             //로그인 시 초기 알람 화면과 관련된 리스트, 유저 정보를 가져와서 세션 스토리지에 넣는다.
             const mentionRequest = await axios.get(
                 `http://localhost:8081/fcm/v1/user/${response.data.data.userId}/mentions`, 

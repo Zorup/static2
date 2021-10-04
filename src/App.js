@@ -52,7 +52,7 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
       messaging.getToken().then((currentToken)=>{
         if(currentToken){
           axios.patch(
-            `http://localhost:8081/main/v1/user/${loginUserInfo.userId}?push-token=${currentToken}`, 
+            `http://localhost:8081/fcm/v1/user/${loginUserInfo.userId}?push-token=${currentToken}`, 
             null,
             {
               withCredentials: true
