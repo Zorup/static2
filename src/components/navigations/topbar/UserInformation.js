@@ -15,7 +15,6 @@ function UserInformation({loginUserInfo, clearMentionList, clearUserInfo}){
             );
             clearMentionList();
             clearUserInfo();
-            console.log("로그아웃");
         }catch(e){}
     };
 

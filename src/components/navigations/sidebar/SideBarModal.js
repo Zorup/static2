@@ -15,6 +15,7 @@ export function CreatGroupModal({forumList, setForumList}){
                     withCredentials: true
                 }
             );
+            console.log(response);
             setForumName("");
             setForumList([
                 ...forumList,
@@ -22,6 +23,11 @@ export function CreatGroupModal({forumList, setForumList}){
             ]);
             $('#subGroup').modal('hide');
         }catch(e){
+            console.log("error!!");
+            console.log(e.response);
+            if(e.response.data === "Expired"){
+                console.log("정상적인 토큰이지만 만료됨");
+            }
         }
     }
     
