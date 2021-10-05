@@ -1,7 +1,24 @@
 import {connect} from 'react-redux';
+import axios from 'axios';
+import {logOut} from '../../../module/login'
+import {clearMentionList} from '../../../module/mention'
 
-function UserInformation({loginUserInfo}){
-    console.log(loginUserInfo);
+function UserInformation({loginUserInfo, clearMentionList, clearUserInfo}){
+    const onClickLogOut = async () =>{
+        try{
+            const response = await axios.post(
+                `http://localhost:8081/auth/v1/logout/user/${loginUserInfo.userId}`,
+                null,
+                {
+                    withCredentials: true
+                }
+            );
+            clearMentionList();
+            clearUserInfo();
+            console.log("로그아웃");
+        }catch(e){}
+    };
+
     return(
         <li className="nav-item dropdown no-arrow">
             <a className="nav-link dropdown-toggle" href="#" id="userDropdown" role="button"
@@ -25,7 +42,10 @@ function UserInformation({loginUserInfo}){
                     Activity Log
                 </a>
                 <div className="dropdown-divider"></div>
-                <a className="dropdown-item" href="#" data-toggle="modal" data-target="#logoutModal">
+                <a className="dropdown-item" 
+                   data-toggle="modal"
+                   data-target="#logoutModal"
+                   onClick={onClickLogOut}>
                     <i className="fas fa-sign-out-alt fa-sm fa-fw mr-2 text-gray-400"></i>
                     Logout
                 </a>
@@ -36,8 +56,18 @@ function UserInformation({loginUserInfo}){
 
 const mapStateToProps = state => ({
     loginUserInfo: state.checkLogin.loginUserInfo,
-  });
+});
+
+const mapDispatchToProps = dispatch => ({
+    clearUserInfo: ()=>{
+        dispatch(logOut());
+    },
+    clearMentionList: ()=>{
+        dispatch(clearMentionList());
+    }
+});
 
 export default connect(
-    mapStateToProps
+    mapStateToProps,
+    mapDispatchToProps
 )(UserInformation)
