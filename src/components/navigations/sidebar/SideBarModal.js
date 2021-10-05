@@ -8,6 +8,7 @@ export function CreatGroupModal({forumList, setForumList}){
     const onChangeForumName = useCallback (e=>setForumName(e.target.value), []);
     const createForum = async()=>{
         try{
+            //TODO 전체 axios는 함수로 한번 감싸서 함수형태로 만든 후 try에서 호출하도록 변경할것.
             const response = await axios.post(
                 `http://localhost:8081/main/v1/forum?forumName=${forumName}`,
                 null,
@@ -23,10 +24,16 @@ export function CreatGroupModal({forumList, setForumList}){
             ]);
             $('#subGroup').modal('hide');
         }catch(e){
-            console.log("error!!");
-            console.log(e.response);
+            /** TODO
+             * 해당 영역에 들어갈것 공통 함수로 만들 것 
+             * paramter :: error response, 위에서 정의한 axios를 callback함수로 받음 
+             * response data 체크 후 로그아웃 처리할 것인지, 
+             * refresh api를 호출해서 토큰을 재발급받은후  callback함수를 실행할 것인지 결정하도록 구성 
+            */
             if(e.response.data === "Expired"){
                 console.log("정상적인 토큰이지만 만료됨");
+            } else{
+                console.log("로그아웃 처리")
             }
         }
     }
