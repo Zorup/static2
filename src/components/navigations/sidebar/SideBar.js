@@ -4,12 +4,16 @@ import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
 import axios from 'axios';
 import ForumButton from './ForumButton';
 
-function SideBar({toggle, setToggle, setForum}){
+function SideBar({toggle, setToggle, setForum, userList}){
     const [forumList, setForumList] = useState([]);
 
     const controlParentToggle = () =>{
         setToggle(!toggle);
     };
+
+    const dmUserList = userList.map(user =>(
+        <a className="custom-collapse-item abtn" key={user.userId} data-uid={user.userId}>{user.name}</a>
+    ));
 
     useEffect(()=>{
         const fetchForumList = async()=>{
@@ -57,20 +61,40 @@ function SideBar({toggle, setToggle, setForum}){
 
                 <li className="nav-item">
                     <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePages"
-                    aria-expanded="true" aria-controls="collapsePages">
+                    aria-expanded="false" aria-controls="collapsePages">
                         <i className="fas fa-fw fa-cog"></i>
                         <span>설정</span>
                     </a>
-                    <div id="collapsePages" className="collapse" aria-labelledby="headingPages" data-parent="#accordionSidebar">
+                    <div id="collapsePages" className="collapse"  data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded" >
                             <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
                             <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
                         </div>
                     </div>
                 </li>
-
                 {/** 사이드바 토글 */}
                 <hr className="sidebar-divider d-none d-md-block"></hr>
+
+                <div className="sidebar-heading">
+                    다이렉트 메시지
+                </div>
+
+                <li className="nav-item">
+                    <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dm-target-user"
+                    aria-expanded="false" aria-controls="dm-target-user">
+                        <img className="dmIcon" src={process.env.PUBLIC_URL + "/send.png"}/>
+                        {/**이미지 색상 다른 아이콘 색이랑 맞게 수정해서 넣기 */}
+                        <span> 다이렉트 메시지</span>
+                    </a>
+                    <div id="dm-target-user" className="collapse" data-parent="#accordionSidebar">
+                        <div className="bg-white py-2 collapse-inner rounded" >
+                            {dmUserList}
+                        </div>
+                    </div>
+                </li>
+
+
+                {/** 사이드바 토글 */}
                 <div className="text-center d-none d-md-inline">
                     <button className="rounded-circle border-0" id="sidebarToggle" onClick={controlParentToggle}></button>
                 </div>

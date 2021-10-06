@@ -82,7 +82,7 @@ function GroupPage() {
 
     return (
       <div id="wrapper">
-        <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId}/>
+        <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId} userList={userList}/>
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
