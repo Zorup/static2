@@ -36,6 +36,7 @@ function LoginPage({logIn, setUserMentionAlert}){
             );
             setUserMentionAlert(mentionRequest.data);
             logIn(response.data.data);
+            window.location.hash = `forum/1`;
           }catch(e){
               alert("login 실패");
           }

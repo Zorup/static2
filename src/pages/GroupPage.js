@@ -11,7 +11,6 @@ import $ from 'jquery';
 require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
 function GroupPage() {
-    
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
@@ -22,7 +21,15 @@ function GroupPage() {
     const controlSideBar = (state) => {
       setToggle(state);
     };
-    
+
+    if(window.location.hash !== undefined && window.location.hash.length > 5){
+      const newId = parseInt(window.location.hash.split('/')[1]);
+      if(!isNaN(newId) && (newId !== forumId)){
+        window.location.hash = `forum/${newId}`;
+        setForumId(newId);
+      }
+    }
+
     useEffect(()=>{
       $('.comment-input').suggest('@', {
         data: userList,
