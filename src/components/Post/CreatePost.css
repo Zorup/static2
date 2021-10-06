@@ -1,7 +1,11 @@
-.mt-10{
+.mt-10 {
     margin-top: 10px;
 }
 
-.hideElement{
+.hideElement {
     display: none;
+}
+
+.ql-editor {
+    height: 100px !important;
 }

@@ -2,11 +2,16 @@ import './CreatePost.css'
 import {connect} from 'react-redux';
 import axios from 'axios';
 import {useState, useCallback} from "react"
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
-    const onChangeContent = useCallback (e=>setContent(e.target.value), []);
+    const onChangeContent = (value) => {
+        console.log(value);
+        setContent(value);
+    }
 
     const creatPost = async()=>{
         try{
@@ -21,6 +26,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                     withCredentials: true
                 }
             );
+            console.log(content);
             setContent("");
             const newPosts = [...posts];
             newPosts.splice(0,0,response.data.data);
@@ -43,21 +49,21 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                         </div>
                         
                         <form id="post-write-form" className="mt-10">
-                            <div className="d-flex flex-row align-items-start">
-                                <textarea name ='content' 
-                                          className="form-control ml-1 shadow-none textarea"
-                                          value={content}
-                                          placeholder="게시글 내용을 입력하세요."
-                                          onChange={onChangeContent}></textarea>
+                            <div>
+                                <ReactQuill name ='content' 
+                                            className="ml-1 shadow-none"
+                                            value={content}
+                                            placeholder="게시글 내용을 입력하세요."
+                                            onChange={onChangeContent} />
                             </div>
-                            <div className="mt-2 text-right">
+                        </form>
+                        <div className="mt-2 text-right">
                                 <input id="post-write-submit" 
                                        className="btn btn-primary btn-sm shadow-none" 
                                        type='button' 
                                        value="submit" 
                                        onClick={creatPost}/>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
