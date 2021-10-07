@@ -36,7 +36,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
         }
     }
 
-    const imageHandler = () => {
+    /*const imageHandler = () => {
         console.log('start');
 
         const input = document.createElement('input');
@@ -50,7 +50,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
             formData.append('img', file);   // formdata로 변경
 
             try{
-                const result = await axios.post(/*서버로 보낼 url 들어갈 자리*/ formData);
+                const result = await axios.post(서버로 보낼 url 들어갈 자리 formData);
             
                 const IMG_URL = result.data.url;    // data 들어간 url 받아오기
 
@@ -61,7 +61,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                 console.log('error');
             }
         });
-    };
+    }; */
 
     const modules = useMemo(() => { // usememo 사용, imagehandler 추가
         return {
@@ -72,7 +72,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
               ['image'],
             ],
             handlers: {
-              image: imageHandler,
+             // image: imageHandler,
             },
           },
         };
