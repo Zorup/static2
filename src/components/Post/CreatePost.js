@@ -8,7 +8,7 @@ import 'react-quill/dist/quill.snow.css';
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
-    const quillRef = useRef();  // 에디터 접근
+    const quillRef = useRef();
     const onChangeContent = (value) => {
         console.log(value);
         setContent(value);
@@ -35,6 +35,33 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
         }catch(e){
         }
     }
+
+    const imageHandler = () => {
+        console.log('start');
+
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();      // input 창 클릭
+
+        input.addEventListener('change', async() => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('img', file);   // formdata로 변경
+
+            try{
+                const result = await axios.post(/*서버로 보낼 url 들어갈 자리*/ formData);
+            
+                const IMG_URL = result.data.url;    // data 들어간 url 받아오기
+
+                const editor = quillRef.current.getEditor();    
+                const range = editor.getSelection();        // 커서 위치
+                editor.insertEmbed(range, 'image', IMG_URL);  // 위치에 추가
+            } catch(error){
+                console.log('error');
+            }
+        });
+    };
 
     const modules = useMemo(() => { // usememo 사용, imagehandler 추가
         return {
@@ -77,8 +104,8 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                         <form id="post-write-form" className="mt-10">
                             <div>
                                 <ReactQuill name ='content' 
-                                            ref={quillRef}
                                             className="ml-1 shadow-none"
+                                            ref={quillRef}
                                             value={content}
                                             modules={modules}
                                             formats={formats}
