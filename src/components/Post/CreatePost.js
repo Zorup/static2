@@ -1,13 +1,14 @@
 import './CreatePost.css'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {useState, useCallback} from "react"
+import {useState, useCallback, useMemo, useRef} from "react"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
+    const quillRef = useRef();  // 에디터 접근
     const onChangeContent = (value) => {
         console.log(value);
         setContent(value);
@@ -35,6 +36,31 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
         }
     }
 
+    const modules = useMemo(() => { // usememo 사용, imagehandler 추가
+        return {
+          toolbar: {
+            container: [
+              [{ header: [1, 2, false] }],
+              ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+              ['image'],
+            ],
+            handlers: {
+              image: imageHandler,
+            },
+          },
+        };
+      }, []);
+
+      const formats = [     // format
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'blockquote',
+        'image',
+      ];
+
     return(
     <div className="container">
         <div className="d-flex  row">
@@ -51,8 +77,11 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                         <form id="post-write-form" className="mt-10">
                             <div>
                                 <ReactQuill name ='content' 
+                                            ref={quillRef}
                                             className="ml-1 shadow-none"
                                             value={content}
+                                            modules={modules}
+                                            formats={formats}
                                             placeholder="게시글 내용을 입력하세요."
                                             onChange={onChangeContent} />
                             </div>
