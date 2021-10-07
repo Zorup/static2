@@ -1,12 +1,18 @@
 import './CreatePost.css'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {useState, useCallback} from "react"
+import {useState, useCallback, useMemo, useRef} from "react"
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
-    const onChangeContent = useCallback (e=>setContent(e.target.value), []);
+    const quillRef = useRef();
+    const onChangeContent = (value) => {
+        console.log(value);
+        setContent(value);
+    }
 
     const creatPost = async()=>{
         try{
@@ -21,6 +27,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                     withCredentials: true
                 }
             );
+            console.log(content);
             setContent("");
             const newPosts = [...posts];
             newPosts.splice(0,0,response.data.data);
@@ -28,6 +35,58 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
         }catch(e){
         }
     }
+
+    /*const imageHandler = () => {
+        console.log('start');
+
+        const input = document.createElement('input');
+        input.setAttribute('type', 'file');
+        input.setAttribute('accept', 'image/*');
+        input.click();      // input 창 클릭
+
+        input.addEventListener('change', async() => {
+            const file = input.files[0];
+            const formData = new FormData();
+            formData.append('img', file);   // formdata로 변경
+
+            try{
+                const result = await axios.post(서버로 보낼 url 들어갈 자리 formData);
+            
+                const IMG_URL = result.data.url;    // data 들어간 url 받아오기
+
+                const editor = quillRef.current.getEditor();    
+                const range = editor.getSelection();        // 커서 위치
+                editor.insertEmbed(range, 'image', IMG_URL);  // 위치에 추가
+            } catch(error){
+                console.log('error');
+            }
+        });
+    }; */
+
+    const modules = useMemo(() => { // usememo 사용, imagehandler 추가
+        return {
+          toolbar: {
+            container: [
+              [{ header: [1, 2, false] }],
+              ['bold', 'italic', 'underline', 'strike', 'blockquote'],
+              ['image'],
+            ],
+            handlers: {
+             // image: imageHandler,
+            },
+          },
+        };
+      }, []);
+
+      const formats = [     // format
+        'header',
+        'bold',
+        'italic',
+        'underline',
+        'strike',
+        'blockquote',
+        'image',
+      ];
 
     return(
     <div className="container">
@@ -43,21 +102,24 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
                         </div>
                         
                         <form id="post-write-form" className="mt-10">
-                            <div className="d-flex flex-row align-items-start">
-                                <textarea name ='content' 
-                                          className="form-control ml-1 shadow-none textarea"
-                                          value={content}
-                                          placeholder="게시글 내용을 입력하세요."
-                                          onChange={onChangeContent}></textarea>
+                            <div>
+                                <ReactQuill name ='content' 
+                                            className="ml-1 shadow-none"
+                                            ref={quillRef}
+                                            value={content}
+                                            modules={modules}
+                                            formats={formats}
+                                            placeholder="게시글 내용을 입력하세요."
+                                            onChange={onChangeContent} />
                             </div>
-                            <div className="mt-2 text-right">
+                        </form>
+                        <div className="mt-2 text-right">
                                 <input id="post-write-submit" 
                                        className="btn btn-primary btn-sm shadow-none" 
                                        type='button' 
                                        value="submit" 
                                        onClick={creatPost}/>
                             </div>
-                        </form>
                     </div>
                 </div>
             </div>
