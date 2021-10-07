@@ -2,9 +2,11 @@ import TopBar from '../components/navigations/topbar/TopBar';
 import SideBar from '../components/navigations/sidebar/SideBar';
 import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
+import Chat from '../components/chat/Chat';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
+
 
 import axios from 'axios';
 import $ from 'jquery';
@@ -20,6 +22,10 @@ function GroupPage() {
 
     const controlSideBar = (state) => {
       setToggle(state);
+    };
+
+    const movePageTop = ()=>{
+      window.scrollTo({top:0, behavior: 'smooth'});
     };
 
     if(window.location.hash !== undefined && window.location.hash.length > 5){
@@ -88,36 +94,43 @@ function GroupPage() {
     ));
 
     return (
-      <div id="wrapper">
-        <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId} userList={userList}/>
-  
-        <div id="content-wrapper" className="d-flex flex-column">
-          <div id="content">
-              <TopBar toggle={toggle} setToggle={controlSideBar}/>
-              <div className="container-fluid">
-                <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
-                <hr></hr>
-                <div className="container">
-                  <div className="d-flex row">
-                    <div className="col-md-7">
-                      <div className="d-flex flex-column comment-section">
-                        {postList}
+      <>
+        <div id="wrapper">
+          <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId} userList={userList}/>
+    
+          <div id="content-wrapper" className="d-flex flex-column">
+            <div id="content">
+                <TopBar toggle={toggle} setToggle={controlSideBar}/>
+                <div className="container-fluid">
+                  <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
+                  <hr></hr>
+                  <div className="container">
+                    <div className="d-flex row">
+                      <div className="col-md-7">
+                        <div className="d-flex flex-column comment-section">
+                          {postList}
+                        </div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </div>
-          </div>
+            </div>
 
-          <footer className="sticky-footer bg-white">
-                  <div className="container my-auto">
-                      <div className="copyright text-center my-auto">
-                          <span>Copyright &copy; 2021 HONIK JP GroupWare</span>
-                      </div>
-                  </div>
-          </footer>
+            <footer className="sticky-footer bg-white">
+                    <div className="container my-auto">
+                        <div className="copyright text-center my-auto">
+                            <span>Copyright &copy; 2021 HONIK JP GroupWare</span>
+                        </div>
+                    </div>
+            </footer>
+          </div>
         </div>
-      </div>
+        
+        <Chat></Chat>
+        <button className="scroll-to-top rounded" onClick={movePageTop}>
+          <i className="fas fa-angle-up"></i>
+        </button>
+      </>
     );
   }
 

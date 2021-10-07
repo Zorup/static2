@@ -93,7 +93,6 @@ function SideBar({toggle, setToggle, setForum, userList}){
                     </div>
                 </li>
 
-
                 {/** 사이드바 토글 */}
                 <div className="text-center d-none d-md-inline">
                     <button className="rounded-circle border-0" id="sidebarToggle" onClick={controlParentToggle}></button>
