@@ -5,7 +5,6 @@ import {useState, useCallback, useMemo, useRef} from "react"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
     const quillRef = useRef();
@@ -17,7 +16,7 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const creatPost = async()=>{
         try{
             const response = await axios.post(
-                'http://localhost:8081/main/v1/post',
+                `${process.env.REACT_APP_API_URL}/main/v1/post`,
                 {
                     "forumId" : forumId,
                     "groupId" : groupId,
