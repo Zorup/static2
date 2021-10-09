@@ -126,7 +126,7 @@ function GroupPage() {
           </div>
         </div>
         
-        <Chat></Chat>
+        {/**<Chat></Chat>*/}
         <button className="scroll-to-top rounded" onClick={movePageTop}>
           <i className="fas fa-angle-up"></i>
         </button>
