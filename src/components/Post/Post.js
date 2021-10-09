@@ -14,7 +14,7 @@ function Post({post, pushTargetUsers}){
     const clickLikeHandler = async()=>{
         try{
             const response = await axios.post(
-                `http://localhost:8081/main/v1/like?postId=${post.postId}`,
+                `${process.env.REACT_APP_API_URL}/main/v1/like?postId=${post.postId}`,
                 null,
                 {
                     withCredentials: true

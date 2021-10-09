@@ -12,7 +12,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
         params.append('content', textAreaRef.current.value);
         try{
             const response = await axios.post(
-                `http://localhost:8081/main/v1/comment`,
+                `${process.env.REACT_APP_API_URL}/main/v1/comment`,
                 params,
                 {
                     headers: {
@@ -33,7 +33,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
                                                         pushTargetUsers, postId, true);
                 
                 await axios.post(
-                    `http://localhost:8081/fcm/v1/fcm-msg`,
+                    `${process.env.REACT_APP_API_URL}/fcm/v1/fcm-msg`,
                     pushRequestData,
                     {
                         withCredentials: true

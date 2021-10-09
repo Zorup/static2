@@ -10,7 +10,7 @@ export function CreatGroupModal({forumList, setForumList}){
         try{
             //TODO 전체 axios는 함수로 한번 감싸서 함수형태로 만든 후 try에서 호출하도록 변경할것.
             const response = await axios.post(
-                `http://localhost:8081/main/v1/forum?forumName=${forumName}`,
+                `${process.env.REACT_APP_API_URL}/main/v1/forum?forumName=${forumName}`,
                 null,
                 {
                     withCredentials: true
