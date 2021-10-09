@@ -69,7 +69,7 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
       });
     }
   }, [isLogin, loginUserInfo.userId]);
-  //render={() => <Education education={data} />}/>
+
   return (
     <Router>
       <Switch>

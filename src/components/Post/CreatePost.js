@@ -1,7 +1,7 @@
 import './CreatePost.css'
 import {connect} from 'react-redux';
 import axios from 'axios';
-import {useState, useCallback, useMemo, useRef} from "react"
+import {useState, useMemo, useRef} from "react"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 

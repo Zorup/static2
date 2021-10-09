@@ -36,11 +36,11 @@ function Post({post, pushTargetUsers}){
                     </div>
                 </div>
                 <div className="mt-2">
-                    <p className="comment-text">
-                    <div dangerouslySetInnerHTML={ { __html: post.content } }>
-                        {/* html로 받아오기 위해서 */}
+                    <div className="comment-text">
+                        <div dangerouslySetInnerHTML={ { __html: post.content } }>
+                            {/* html로 받아오기 위해서 */}
+                        </div>
                     </div>
-                    </p>
                 </div>
 
                 <div className="bg-white">

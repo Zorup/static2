@@ -80,7 +80,7 @@ export function DeleteGroupModal({forumList, setForumList}){
 
         try{
             const response = await axios.delete(
-                'http://localhost:8081/main/v1/forum',
+                `${process.env.REACT_APP_API_URL}/main/v1/forum`,
                 {
                     data : params,
                     withCredentials: true

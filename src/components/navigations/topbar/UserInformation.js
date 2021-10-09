@@ -7,7 +7,7 @@ function UserInformation({loginUserInfo, clearMentionList, clearUserInfo}){
     const onClickLogOut = async () =>{
         try{
             const response = await axios.post(
-                `http://localhost:8081/auth/v1/logout/user/${loginUserInfo.userId}`,
+                `${process.env.REACT_APP_API_URL}/auth/v1/logout/user/${loginUserInfo.userId}`,
                 null,
                 {
                     withCredentials: true

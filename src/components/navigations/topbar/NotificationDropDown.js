@@ -12,7 +12,7 @@ function NotificationDropDown({item, clickRender}){
         try{
             if(!readYn){
                 await axios.patch(
-                    `http://localhost:8081/fcm/v1/notification/${item.notificationId}`,
+                    `${process.env.REACT_APP_API_URL}/fcm/v1/notification/${item.notificationId}`,
                     null,
                     { withCredentials: true }
                 );

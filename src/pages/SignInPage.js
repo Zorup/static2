@@ -34,7 +34,7 @@ export default function SignInPage() {
         }
         try{
             const response = await axios.post(
-                'http://localhost:8081/auth/v1/signin',
+                `${process.env.REACT_APP_API_URL}/auth/v1/signin`,
                 signInParam,
                 {
                     withCredentials: true
