@@ -2,7 +2,6 @@ import TopBar from '../components/navigations/topbar/TopBar';
 import SideBar from '../components/navigations/sidebar/SideBar';
 import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
-import Chat from '../components/chat/Chat';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
@@ -96,7 +95,10 @@ function GroupPage() {
     return (
       <>
         <div id="wrapper">
-          <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId} userList={userList}/>
+          <SideBar toggle={toggle} 
+                  setToggle={controlSideBar} 
+                  setForum={setForumId}
+                  userList={userList}/>
     
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
@@ -126,10 +128,11 @@ function GroupPage() {
           </div>
         </div>
         
-        {/**<Chat></Chat>*/}
+        
         <button className="scroll-to-top rounded" onClick={movePageTop}>
           <i className="fas fa-angle-up"></i>
         </button>
+        
       </>
     );
   }

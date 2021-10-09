@@ -3,16 +3,24 @@ import React, { useState, useEffect } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
 import axios from 'axios';
 import ForumButton from './ForumButton';
-
+import Chat from '../../chat/Chat';
 function SideBar({toggle, setToggle, setForum, userList}){
     const [forumList, setForumList] = useState([]);
+    const [showChatUI, setShowChatUI] = useState(false);
+
+    const onClickDM = (e)=>{
+        setShowChatUI(true);
+    }
 
     const controlParentToggle = () =>{
         setToggle(!toggle);
     };
 
     const dmUserList = userList.map(user =>(
-        <a className="custom-collapse-item abtn" key={user.userId} data-uid={user.userId}>{user.name}</a>
+        <a className="custom-collapse-item abtn" 
+            key={user.userId} 
+            data-uid={user.userId}
+            onClick={onClickDM}>{user.name}</a>
     ));
 
     useEffect(()=>{
@@ -35,6 +43,7 @@ function SideBar({toggle, setToggle, setForum, userList}){
 
     return(
         <>
+            {showChatUI ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI}></Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div className="sidebar-brand-icon rotate-n-15">
