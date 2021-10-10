@@ -3,28 +3,53 @@ import { Rnd } from "react-rnd"
 import ChatHeader from "./ChatHeader"
 import {MyMessage, OtherMessage} from "./CharMessage"
 import {connect} from 'react-redux';
-
+import { useState, useEffect } from "react";
+import axios from "axios";
 var Stomp = require('stompjs');
 
-
 function Chat({showChatUI, setShowChatUI, loginUserInfo}){
-    let socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
-    let client = Stomp.over(socket);
-    client.debug = function (e) {
-        console.log(e);
-    };
-    
-    client.connect({}, function(){  // 연결
-        client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
-            console.log(JSON.parse(m.body));
+    const [initSocket, setInitSocket] = useState(false);
+    let socket;
+    let client;
+
+    if(!initSocket){
+        socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
+        client = Stomp.over(socket);
+        client.debug = function (e) {
+            console.log(e);
+        };
+        client.connect({}, function(){
+            client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
+                console.log(JSON.parse(m.body));
+            });
         });
+        setInitSocket(true);
+    }
+
+    useEffect(()=>{
+        const getChatLogs = async()=>{
+            let roomId;
+            if(loginUserInfo.userId < showChatUI.userInfo[0].userId){
+                roomId = loginUserInfo.userId+'-'+showChatUI.userInfo[0].userId;
+            }else{
+                roomId = showChatUI.userInfo[0].userId +'-'+ loginUserInfo.userId;
+            }
+            
+            try{
+                const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/chat/user/${loginUserInfo.userId}/room/${roomId}/chat-logs`,
+                {withCredentials: true});
+                console.log(response);
+            }catch(e){}
+        }
+        getChatLogs();
     });
 
     return (
     <Rnd default={{x: 1100, y: 440+window.scrollY, width: 320, height:200, position:'fixed'}} style={{position:"fixed", zIndex:50}}>
             <div className="chatbox-holder">
                 <div className="chatbox">
-                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} client={client}></ChatHeader>
+                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
 
                     <div className="chat-messages">
                         <MyMessage message={"Hello"}></MyMessage>

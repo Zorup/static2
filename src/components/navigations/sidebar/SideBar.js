@@ -2,19 +2,22 @@ import './SideBar.css'
 import React, { useState, useEffect } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
 import axios from 'axios';
+import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
-function SideBar({toggle, setToggle, setForum, userList}){
+
+
+function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
     const [forumList, setForumList] = useState([]);
     const [showChatUI, setShowChatUI] = useState({
             isDisplay : false,
             userInfo : {},
         });
 
-    const onClickDM = (e)=>{
+    const onClickDM = async (e)=>{
         const targetUserId = parseInt(e.target.dataset.uid);
         const targetUser = userList.filter(item => item.userId === targetUserId);
-
+        
         setShowChatUI(
             {
                 isDisplay: true,
@@ -27,7 +30,7 @@ function SideBar({toggle, setToggle, setForum, userList}){
         setToggle(!toggle);
     };
 
-    const dmUserList = userList.map(user =>(
+    const dmUserList = userList.filter(item=>item.userId !== loginUserInfo.userId).map(user =>(
         <a className="custom-collapse-item abtn" 
             key={user.userId} 
             data-uid={user.userId}
@@ -124,5 +127,10 @@ function SideBar({toggle, setToggle, setForum, userList}){
         </>
     )
 }
-
-export default SideBar
+const mapStateToProps = state => ({
+    loginUserInfo: state.checkLogin.loginUserInfo,
+  });
+  
+export default connect(
+    mapStateToProps,
+)(SideBar);
