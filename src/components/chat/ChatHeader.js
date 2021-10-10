@@ -1,10 +1,13 @@
 import "./chat.css"
-export default function ChatHeader({showChatUI, setShowChatUI}){
+export default function ChatHeader({showChatUI, setShowChatUI, client}){
+    console.log(client);
+
     const onClickHandler = ()=>{
         setShowChatUI({
             isDisplay : false,
             userInfo : {},
         });
+        client.disconnect();
     }
 
     return (
