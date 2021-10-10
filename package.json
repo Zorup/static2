@@ -23,6 +23,7 @@
     "redux": "^4.1.1",
     "redux-persist": "^6.0.0",
     "sass": "^1.41.1",
+    "stompjs": "^2.3.3",
     "web-vitals": "^1.1.2"
   },
   "scripts": {

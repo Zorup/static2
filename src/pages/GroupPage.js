@@ -18,7 +18,6 @@ function GroupPage() {
     const [groupId] = useState(1);
     const [userList, setUserList] = useState([]);
     const pushTargetUsers = {};
-
     const controlSideBar = (state) => {
       setToggle(state);
     };

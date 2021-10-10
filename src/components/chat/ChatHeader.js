@@ -1,7 +1,10 @@
 import "./chat.css"
-export default function ChatHeader({setShowChatUI}){
+export default function ChatHeader({showChatUI, setShowChatUI}){
     const onClickHandler = ()=>{
-        setShowChatUI(false);
+        setShowChatUI({
+            isDisplay : false,
+            userInfo : {},
+        });
     }
 
     return (
@@ -11,7 +14,7 @@ export default function ChatHeader({setShowChatUI}){
             </div>
             <div className="chat-partner-name">
                 <span className="status online"></span>
-                사람명2
+                {showChatUI.userInfo[0].name}
             </div>
             <div className="chatbox-icons">
                 <a onClick={onClickHandler}><i className="fa fa-close"></i></a>       

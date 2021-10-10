@@ -6,10 +6,21 @@ import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
 function SideBar({toggle, setToggle, setForum, userList}){
     const [forumList, setForumList] = useState([]);
-    const [showChatUI, setShowChatUI] = useState(false);
+    const [showChatUI, setShowChatUI] = useState({
+            isDisplay : false,
+            userInfo : {},
+        });
 
     const onClickDM = (e)=>{
-        setShowChatUI(true);
+        const targetUserId = parseInt(e.target.dataset.uid);
+        const targetUser = userList.filter(item => item.userId === targetUserId);
+
+        setShowChatUI(
+            {
+                isDisplay: true,
+                userInfo: targetUser
+            }
+        );
     }
 
     const controlParentToggle = () =>{
@@ -43,7 +54,7 @@ function SideBar({toggle, setToggle, setForum, userList}){
 
     return(
         <>
-            {showChatUI ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI}></Chat> : null}
+            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI}></Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div className="sidebar-brand-icon rotate-n-15">
