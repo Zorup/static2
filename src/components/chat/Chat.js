@@ -7,13 +7,45 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 var Stomp = require('stompjs');
 
-function Chat({showChatUI, setShowChatUI, loginUserInfo}){
-    const [initSocket, setInitSocket] = useState(false);
+function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSocket}){
     const [chatLogs, setChatLogs]= useState([]);
+    const [messageInput, setMessageInput] = useState("");
+    const inputHandler = (e) =>{
+        setMessageInput(e.target.value);
+    }
+    const sendMessageHandler = ()=>{
+        const postChatLog = async()=>{
+            try{
+                /**
+                 * 채팅과 관련해서 chat-log 컨트롤러로 보내지말고 
+                 * ChatController로 보내면 한번에 처리.?
+                 * 
+                 */
+                const response = await axios.post(
+                    `${process.env.REACT_APP_API_URL}/chat/chat-log`,
+                    {
+                        roomId: showChatUI.roomId,
+                        sender: loginUserInfo.userId,
+                        message: messageInput
+                    },
+                    {
+                        withCredentials: true
+                    }
+                );
+                setMessageInput("");
+                const newChatLogs = [...chatLogs];
+                newChatLogs.push(response.data);
+                setChatLogs(newChatLogs);
+            }catch(e){}
+        }
+        postChatLog();
+    }
     let socket;
     let client;
 
-    if(!initSocket){
+    useEffect(()=>{
+        /** 소켓 init 하는 부분과 시점에 대해서 좀더 생각해봐야함. */
+        if(!initSocket){
         socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
         client = Stomp.over(socket);
         client.debug = function (e) {
@@ -25,19 +57,37 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo}){
             });
         });
         setInitSocket(true);
-    }
+        }
+    },[])
 
     useEffect(()=>{
         const getChatLogs = async()=>{
-            let roomId;
-            if(loginUserInfo.userId < showChatUI.userInfo[0].userId){
-                roomId = loginUserInfo.userId+'-'+showChatUI.userInfo[0].userId;
-            }else{
-                roomId = showChatUI.userInfo[0].userId +'-'+ loginUserInfo.userId;
-            }
+            try{
+                const response = await axios.get(
+                    `${process.env.REACT_APP_API_URL}/chat/${showChatUI.roomId}/chat-logs`,
+                    { withCredentials: true }
+                );
+                if(response.data !== ""){
+                    setChatLogs(response.data);
+                }else{
+                    setChatLogs([]);
+                }
+            }catch(e){}
         }
-        //getChatLogs();
-    });
+        getChatLogs();
+    },[showChatUI]);
+    
+    let chatLists;
+    if(chatLogs.length !== 0 && chatLogs[0].roomId === showChatUI.roomId){
+        chatLists = chatLogs.map(logs =>{
+        if(logs.sender === loginUserInfo.userId){
+            return <MyMessage message={logs.message} key={logs.logNo}></MyMessage>;
+        } else{
+            const user = showChatUI.userInfo.find(user => user.userId === logs.sender);
+            return <OtherMessage senderName={user.name} message={logs.message} key={logs.logNo}></OtherMessage>;
+        }
+        });
+    }
 
     return (
     <Rnd default={{x: 1100, y: 440+window.scrollY, width: 320, height:200, position:'fixed'}} style={{position:"fixed", zIndex:50}}>
@@ -46,14 +96,15 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo}){
                     <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI}></ChatHeader>
 
                     <div className="chat-messages">
-                        <MyMessage message={"Hello"}></MyMessage>
-                        <OtherMessage senderName={"Mamun Khandaker"} message={"Hi."}></OtherMessage>
+                        {chatLists}
                     </div>
                     
                     {/** Chat Box Putter.. */}
                     <div className="chat-input-holder">
-                        <textarea className="chat-input"></textarea>
-                        <input type="button" value="Send" className="message-send" />
+                        <textarea className="chat-input" 
+                                  value={messageInput}
+                                  onChange={inputHandler}></textarea>
+                        <input type="button" value="Send" className="message-send" onClick={sendMessageHandler}/>
                     </div>
                 </div>
             </div>

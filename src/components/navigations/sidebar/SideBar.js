@@ -14,7 +14,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
     const [showChatUI, setShowChatUI] = useState({
             isDisplay : false,
             userInfo : {},
-            roomName : ""
+            roomName : "",
+            roomId : ""
         });
     
     const onClickDM = async (e)=>{
@@ -33,7 +34,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
             {
                 isDisplay: true,
                 userInfo: targetUsers,
-                roomName: e.target.text
+                roomName: e.target.text,
+                roomId : e.target.dataset.rid
             }
         );
     }
