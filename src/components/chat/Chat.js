@@ -7,20 +7,44 @@ import { useState, useEffect } from "react";
 import axios from "axios";
 var Stomp = require('stompjs');
 
+const connectPromise = () =>
+    new Promise((resolve, reject) => {
+        const socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
+        const stompClient = Stomp.over(socket);
+        stompClient.debug = (e) => {console.log(e)};
+        const onConnect = () => resolve(stompClient);
+        const onError = error => reject(new Error(error));
+        stompClient.connect({}, onConnect, onError);
+    });
+
 function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSocket}){
     const [chatLogs, setChatLogs]= useState([]);
     const [messageInput, setMessageInput] = useState("");
+    const [client, setClient] = useState(null);
+
+    const publish = (msg, targetId) => {
+        if (!client) return;
+        client.send(`/app/send/${targetId}`, {}, msg);
+    };
+
+    /** subscribe */
+    (function(){
+        if (!client || client.counter !== 0) return;
+        client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
+            console.log(JSON.parse(m.body));
+            const newChatLogs = [...chatLogs];
+            newChatLogs.push(JSON.parse(m.body));
+            //오류남 .. setChatLogs(newChatLogs);
+        });
+    })();
+
     const inputHandler = (e) =>{
         setMessageInput(e.target.value);
     }
+
     const sendMessageHandler = ()=>{
         const postChatLog = async()=>{
             try{
-                /**
-                 * 채팅과 관련해서 chat-log 컨트롤러로 보내지말고 
-                 * ChatController로 보내면 한번에 처리.?
-                 * 
-                 */
                 const response = await axios.post(
                     `${process.env.REACT_APP_API_URL}/chat/chat-log`,
                     {
@@ -32,6 +56,11 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
                         withCredentials: true
                     }
                 );
+                /** 한번에 처리할수 있는 방법이 없을까? 차후 보완해야될 부분중 하나. 성능상 문제가 있을것 같음. */
+                showChatUI.userInfo.forEach(user => {
+                    publish(JSON.stringify(response.data), user.userId);
+                });
+                publish(JSON.stringify(response.data), 2);
                 setMessageInput("");
                 const newChatLogs = [...chatLogs];
                 newChatLogs.push(response.data);
@@ -40,25 +69,20 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
         }
         postChatLog();
     }
-    let socket;
-    let client;
 
     useEffect(()=>{
-        /** 소켓 init 하는 부분과 시점에 대해서 좀더 생각해봐야함. */
-        if(!initSocket){
-        socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
-        client = Stomp.over(socket);
-        client.debug = function (e) {
-            console.log(e);
-        };
-        client.connect({}, function(){
-            client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
-                console.log(JSON.parse(m.body));
-            });
-        });
-        setInitSocket(true);
+        const connect = async () => {
+            try{
+                const stompClient = await connectPromise();
+                setClient(stompClient);
+            }catch(e){}
         }
-    },[])
+
+        if(!initSocket){
+            connect();
+            setInitSocket(true);
+        }
+    },[initSocket, setInitSocket])
 
     useEffect(()=>{
         const getChatLogs = async()=>{
@@ -93,7 +117,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
     <Rnd default={{x: 1100, y: 440+window.scrollY, width: 320, height:200, position:'fixed'}} style={{position:"fixed", zIndex:50}}>
             <div className="chatbox-holder">
                 <div className="chatbox">
-                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI}></ChatHeader>
+                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
 
                     <div className="chat-messages">
                         {chatLists}
