@@ -9,6 +9,7 @@ var Stomp = require('stompjs');
 
 function Chat({showChatUI, setShowChatUI, loginUserInfo}){
     const [initSocket, setInitSocket] = useState(false);
+    const [chatLogs, setChatLogs]= useState([]);
     let socket;
     let client;
 
@@ -34,22 +35,15 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo}){
             }else{
                 roomId = showChatUI.userInfo[0].userId +'-'+ loginUserInfo.userId;
             }
-            
-            try{
-                const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/chat/user/${loginUserInfo.userId}/room/${roomId}/chat-logs`,
-                {withCredentials: true});
-                console.log(response);
-            }catch(e){}
         }
-        getChatLogs();
+        //getChatLogs();
     });
 
     return (
     <Rnd default={{x: 1100, y: 440+window.scrollY, width: 320, height:200, position:'fixed'}} style={{position:"fixed", zIndex:50}}>
             <div className="chatbox-holder">
                 <div className="chatbox">
-                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
+                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI}></ChatHeader>
 
                     <div className="chat-messages">
                         <MyMessage message={"Hello"}></MyMessage>

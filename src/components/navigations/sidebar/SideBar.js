@@ -9,19 +9,31 @@ import Chat from '../../chat/Chat';
 
 function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
     const [forumList, setForumList] = useState([]);
+    const [chatRooms, setChatRooms] = useState([]);
+    const [initSocket, setInitSocket] = useState(false);
     const [showChatUI, setShowChatUI] = useState({
             isDisplay : false,
             userInfo : {},
+            roomName : ""
+        });
+    
+    const onClickDM = async (e)=>{
+        /**  차후 확장성을 고려하여 배열로 받는다. */
+        const roomUserIds = (e.target.dataset.rid).split('-')
+                                                .map(item=>parseInt(item))
+                                                .filter(item=> item !== loginUserInfo.userId)
+                                                .sort();
+                                          
+        const targetUsers = [];
+        roomUserIds.forEach(roomUserId => {
+            targetUsers.push(userList.find(user=>user.userId === roomUserId));
         });
 
-    const onClickDM = async (e)=>{
-        const targetUserId = parseInt(e.target.dataset.uid);
-        const targetUser = userList.filter(item => item.userId === targetUserId);
-        
         setShowChatUI(
             {
                 isDisplay: true,
-                userInfo: targetUser
+                userInfo: targetUsers,
+                roomName: e.target.text
             }
         );
     }
@@ -30,11 +42,11 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
         setToggle(!toggle);
     };
 
-    const dmUserList = userList.filter(item=>item.userId !== loginUserInfo.userId).map(user =>(
+    const dmUserList = chatRooms.map(room =>(
         <a className="custom-collapse-item abtn" 
-            key={user.userId} 
-            data-uid={user.userId}
-            onClick={onClickDM}>{user.name}</a>
+            key={room.roomId} 
+            data-rid={room.roomId}
+            onClick={onClickDM}>{room.roomName}</a>
     ));
 
     useEffect(()=>{
@@ -48,7 +60,19 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
           }catch(e){
           }
         };
+        
+        const fetchChatRooms = async()=>{
+            try{
+                const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/chat/${loginUserInfo.userId}/rooms`,
+                { withCredentials: true }
+                );
+                setChatRooms(response.data);
+            }catch(e){}
+        };
+
         fetchForumList();
+        fetchChatRooms();
     }, [])
 
     const forumButtons = forumList.map(item => (
@@ -57,7 +81,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
 
     return(
         <>
-            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI}></Chat> : null}
+            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI} initSocket={initSocket} setInitSocket={setInitSocket}></Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div className="sidebar-brand-icon rotate-n-15">

@@ -4,6 +4,7 @@ export default function ChatHeader({showChatUI, setShowChatUI, setInitSocket}){
         setShowChatUI({
             isDisplay : false,
             userInfo : {},
+            roomName : ""
         });
     }
 
@@ -14,7 +15,7 @@ export default function ChatHeader({showChatUI, setShowChatUI, setInitSocket}){
             </div>
             <div className="chat-partner-name">
                 <span className="status online"></span>
-                {showChatUI.userInfo[0].name}
+                {showChatUI.roomName}
             </div>
             <div className="chatbox-icons">
                 <a onClick={onClickHandler}><i className="fa fa-close"></i></a>       

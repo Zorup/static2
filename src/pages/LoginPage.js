@@ -34,6 +34,7 @@ function LoginPage({logIn, setUserMentionAlert}){
                     withCredentials: true
                 }
             );
+            
             setUserMentionAlert(mentionRequest.data);
             logIn(response.data.data);
             window.location.hash = `forum/1`;
