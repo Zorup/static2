@@ -11,32 +11,52 @@ const connectPromise = () =>
     new Promise((resolve, reject) => {
         const socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
         const stompClient = Stomp.over(socket);
-        stompClient.debug = (e) => {console.log(e)};
+        stompClient.debug = (e) => {console.log(e)
+                                    };
         const onConnect = () => resolve(stompClient);
         const onError = error => reject(new Error(error));
         stompClient.connect({}, onConnect, onError);
     });
 
 function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSocket}){
-    const [chatLogs, setChatLogs]= useState([]);
     const [messageInput, setMessageInput] = useState("");
     const [client, setClient] = useState(null);
+    const [newMessage, setNewMessage] = useState(null);
 
     const publish = (msg, targetId) => {
         if (!client) return;
         client.send(`/app/send/${targetId}`, {}, msg);
     };
 
+    const insertNewChatLogs = (item) => {
+        const newChatLogs = [...showChatUI.chatLogs];
+        newChatLogs.push(item);
+        setShowChatUI({
+            ...showChatUI,
+            chatLogs: newChatLogs
+            }
+        );
+    }
+
     /** subscribe */
-    (function(){
+    useEffect(()=>{
         if (!client || client.counter !== 0) return;
         client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
-            console.log(JSON.parse(m.body));
-            const newChatLogs = [...chatLogs];
-            newChatLogs.push(JSON.parse(m.body));
-            //오류남 .. setChatLogs(newChatLogs);
+            setNewMessage(JSON.parse(m.body))
         });
-    })();
+    });
+
+    useEffect(()=>{
+        if(newMessage !== null){
+            if(showChatUI.roomId === newMessage.roomId){
+                console.log("this message is current chat room Messages");
+                if(newMessage.sender !== loginUserInfo.userId){
+                    insertNewChatLogs(newMessage);
+                }
+            }else{}
+            setNewMessage(null);
+        }
+    }, [newMessage]);
 
     const inputHandler = (e) =>{
         setMessageInput(e.target.value);
@@ -62,9 +82,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
                 });
                 publish(JSON.stringify(response.data), 2);
                 setMessageInput("");
-                const newChatLogs = [...chatLogs];
-                newChatLogs.push(response.data);
-                setChatLogs(newChatLogs);
+                insertNewChatLogs(response.data);
             }catch(e){}
         }
         postChatLog();
@@ -83,27 +101,10 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
             setInitSocket(true);
         }
     },[initSocket, setInitSocket])
-
-    useEffect(()=>{
-        const getChatLogs = async()=>{
-            try{
-                const response = await axios.get(
-                    `${process.env.REACT_APP_API_URL}/chat/${showChatUI.roomId}/chat-logs`,
-                    { withCredentials: true }
-                );
-                if(response.data !== ""){
-                    setChatLogs(response.data);
-                }else{
-                    setChatLogs([]);
-                }
-            }catch(e){}
-        }
-        getChatLogs();
-    },[showChatUI]);
     
     let chatLists;
-    if(chatLogs.length !== 0 && chatLogs[0].roomId === showChatUI.roomId){
-        chatLists = chatLogs.map(logs =>{
+    if(showChatUI.chatLogs.length !== 0){
+        chatLists = showChatUI.chatLogs.map(logs =>{
         if(logs.sender === loginUserInfo.userId){
             return <MyMessage message={logs.message} key={logs.logNo}></MyMessage>;
         } else{

@@ -5,7 +5,8 @@ export default function ChatHeader({showChatUI, setShowChatUI, setInitSocket}){
             isDisplay : false,
             userInfo : {},
             roomName : "",
-            roomId :""
+            roomId :"",
+            chatLogs: [],
         });
         setInitSocket(false);
     }

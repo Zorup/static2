@@ -15,9 +15,10 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
             isDisplay : false,
             userInfo : {},
             roomName : "",
-            roomId : ""
+            roomId : "",
+            chatLogs: [],
         });
-    
+
     const onClickDM = async (e)=>{
         /**  차후 확장성을 고려하여 배열로 받는다. */
         const roomUserIds = (e.target.dataset.rid).split('-')
@@ -30,14 +31,24 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
             targetUsers.push(userList.find(user=>user.userId === roomUserId));
         });
 
-        setShowChatUI(
-            {
+        try{
+            let currentChatLogs = [];
+            const response = await axios.get(
+                `${process.env.REACT_APP_API_URL}/chat/${e.target.dataset.rid}/chat-logs`,
+                { withCredentials: true }
+            );
+            if(response.data !== ""){
+                currentChatLogs = response.data;
+            }
+
+            setShowChatUI({
                 isDisplay: true,
                 userInfo: targetUsers,
                 roomName: e.target.text,
-                roomId : e.target.dataset.rid
-            }
-        );
+                roomId : e.target.dataset.rid,
+                chatLogs : currentChatLogs
+            });
+        }catch(e){}
     }
 
     const controlParentToggle = () =>{
@@ -83,7 +94,11 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
 
     return(
         <>
-            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} setShowChatUI={setShowChatUI} initSocket={initSocket} setInitSocket={setInitSocket}></Chat> : null}
+            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
+                                          setShowChatUI={setShowChatUI} 
+                                          initSocket={initSocket} 
+                                          setInitSocket={setInitSocket}>
+                                    </Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div className="sidebar-brand-icon rotate-n-15">
