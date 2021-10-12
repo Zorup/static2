@@ -57,6 +57,19 @@ function GroupPage() {
           }
         }
       });
+
+      $('.dmSearchInput').suggest('@', {
+        data: userList,
+        map: function(user) {
+          return {
+            value: user.name,
+            text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small> <small hidden>'+user.userId+'</small>'
+          }
+        },
+
+        onselect: function (e, item){
+        }
+      });
     });
 
     useEffect(()=>{

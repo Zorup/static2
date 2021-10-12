@@ -6,7 +6,6 @@ import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
 
-
 function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
     const [forumList, setForumList] = useState([]);
     const [chatRooms, setChatRooms] = useState([]);
@@ -152,6 +151,13 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
                     </a>
                     <div id="dm-target-user" className="collapse" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded" >
+                            <div className="dmSearch">
+                                <input placeholder={"@채팅 유저 추가"}
+                                       className={"dmSearchInput"}/>
+                                <button className={"dmSearchButton"}>
+                                    +
+                                </button>
+                            </div>
                             {dmUserList}
                         </div>
                     </div>
