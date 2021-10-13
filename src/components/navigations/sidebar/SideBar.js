@@ -1,12 +1,14 @@
 import './SideBar.css'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
 import axios from 'axios';
 import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
 
-function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
+function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelected, setIsSelected}){
+    const $chatSearch = useRef();
+    const [isAtSign, setAtSign] = useState(false); 
     const [forumList, setForumList] = useState([]);
     const [chatRooms, setChatRooms] = useState([]);
     const [initSocket, setInitSocket] = useState(false);
@@ -19,7 +21,6 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
         });
 
     const onClickDM = async (e)=>{
-        /**  차후 확장성을 고려하여 배열로 받는다. */
         const roomUserIds = (e.target.dataset.rid).split('-')
                                                 .map(item=>parseInt(item))
                                                 .filter(item=> item !== loginUserInfo.userId)
@@ -48,6 +49,32 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
                 chatLogs : currentChatLogs
             });
         }catch(e){}
+    }
+
+    const onChatRoomSearchHandler = (e) =>{
+        const currentInputValue = e.target.value;
+        if(e.nativeEvent.inputType === "deleteContentBackward"){
+            if(currentInputValue.indexOf('@') === -1){
+                setAtSign(false);
+            }
+            if(currentInputValue.indexOf(isSelected.uname) === -1){
+                setIsSelected({isSelected : false, uid : null, uname: null});
+            }
+        } 
+        else {
+            if(!isSelected.isSelected){
+                if( (e.nativeEvent.data === ' ')|| (!isAtSign && e.nativeEvent.data !== '@') || (isAtSign && e.nativeEvent.data === '@')){
+                    e.target.value = currentInputValue.substr(0, currentInputValue.length-1);
+                    return;
+                }
+            
+                if(e.nativeEvent.data === '@'){
+                    setAtSign(true);
+                }
+            } else{
+                e.target.value = currentInputValue.substr(0, currentInputValue.length-1);
+            }
+        }
     }
 
     const controlParentToggle = () =>{
@@ -153,7 +180,9 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo}){
                         <div className="bg-white py-2 collapse-inner rounded" >
                             <div className="dmSearch">
                                 <input placeholder={"@채팅 유저 추가"}
-                                       className={"dmSearchInput"}/>
+                                       className={"dmSearchInput"}
+                                       ref={$chatSearch}
+                                       onChange={onChatRoomSearchHandler}/>
                                 <button className={"dmSearchButton"}>
                                     +
                                 </button>

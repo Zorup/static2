@@ -17,7 +17,10 @@ function GroupPage() {
     const [toggle, setToggle] = useState(false);
     const [groupId] = useState(1);
     const [userList, setUserList] = useState([]);
+    const [isSelected, setIsSelected] = useState({isSelected : false, uid : null, uname: null});
+
     const pushTargetUsers = {};
+
     const controlSideBar = (state) => {
       setToggle(state);
     };
@@ -68,6 +71,9 @@ function GroupPage() {
         },
 
         onselect: function (e, item){
+          const userInfoArr = item.text.split(" ");
+          const userId = Number.parseInt(userInfoArr[2]);
+          setIsSelected({isSelected : true, uid : userId, uname: '@'+userInfoArr[0]});
         }
       });
     });
@@ -110,7 +116,9 @@ function GroupPage() {
           <SideBar toggle={toggle} 
                   setToggle={controlSideBar} 
                   setForum={setForumId}
-                  userList={userList}/>
+                  userList={userList}
+                  isSelected={isSelected}
+                  setIsSelected={setIsSelected}/>
     
           <div id="content-wrapper" className="d-flex flex-column">
             <div id="content">
