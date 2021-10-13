@@ -21,35 +21,41 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
         });
 
     const onClickDM = async (e)=>{
-        const roomUserIds = (e.target.dataset.rid).split('-')
-                                                .map(item=>parseInt(item))
-                                                .filter(item=> item !== loginUserInfo.userId)
-                                                .sort();
-                                          
+        const targetUsers = getTargetUsers(e.target.dataset.rid);
+        preDisPlayChatRoomHandler(e.target.dataset.rid, e.target.text, targetUsers);
+    }
+
+    const getTargetUsers = (roomId) => {
+        const roomUserIds = (roomId).split('-')
+                                    .map(item=>parseInt(item))
+                                    .filter(item=> item !== loginUserInfo.userId)
+                                    .sort();           
         const targetUsers = [];
         roomUserIds.forEach(roomUserId => {
             targetUsers.push(userList.find(user=>user.userId === roomUserId));
         });
+        return targetUsers;
+    }
 
+    const preDisPlayChatRoomHandler = async (roomId, roomName, targetUsers) => {
         try{
             let currentChatLogs = [];
             const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/chat/${e.target.dataset.rid}/chat-logs`,
+                `${process.env.REACT_APP_API_URL}/chat/${roomId}/chat-logs`,
                 { withCredentials: true }
             );
             if(response.data !== ""){
                 currentChatLogs = response.data;
             }
-
             setShowChatUI({
                 isDisplay: true,
                 userInfo: targetUsers,
-                roomName: e.target.text,
-                roomId : e.target.dataset.rid,
+                roomName: roomName,
+                roomId : roomId,
                 chatLogs : currentChatLogs
             });
         }catch(e){}
-    }
+    };
 
     const onChatRoomSearchHandler = (e) =>{
         const currentInputValue = e.target.value;
@@ -62,6 +68,12 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             }
         } 
         else {
+            //드래그 땡겨서 지우면 삭제가 아니라 input으로 인식하네..
+            if(currentInputValue === ''){
+                setAtSign(false);
+                setIsSelected({isSelected : false, uid : null, uname: null});
+                return;
+            }
             if(!isSelected.isSelected){
                 if( (e.nativeEvent.data === ' ')|| (!isAtSign && e.nativeEvent.data !== '@') || (isAtSign && e.nativeEvent.data === '@')){
                     e.target.value = currentInputValue.substr(0, currentInputValue.length-1);
@@ -75,6 +87,48 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                 e.target.value = currentInputValue.substr(0, currentInputValue.length-1);
             }
         }
+    }
+
+    const addOpenRoom = async (data) =>{
+        try{
+            const response = await axios.post(
+                `${process.env.REACT_APP_API_URL}/chat/room`,
+                data,
+                {
+                    withCredentials: true
+                }    
+            );
+            const newState = [...chatRooms];
+            newState.push(response.data);
+            setChatRooms(newState);
+        }catch(e){
+        }
+    }
+
+    const createChatRoomButtonHandler = () => {
+        if(isSelected.uid === null) return;
+        const roomId = isSelected.uid > loginUserInfo.userId ? 
+                    loginUserInfo.userId+'-'+isSelected.uid : isSelected.uid +'-'+ loginUserInfo.userId;
+        const roomName = loginUserInfo.userId === isSelected.uid ? '나에게 보내기' : isSelected.uname.substring(1);
+        const data = {
+            userId : loginUserInfo.userId,
+            roomId : roomId,
+            roomName: roomName,
+        }
+
+        const preHaves = chatRooms.find((room) => {
+            if(room.roomId === roomId) return true;
+            return false;
+        });
+
+        if(preHaves === undefined){
+            addOpenRoom(data);
+        }
+        const targetUsers = getTargetUsers(roomId);
+        preDisPlayChatRoomHandler(roomId, roomName, targetUsers);
+        $chatSearch.current.value = '';
+        setAtSign(false);
+        setIsSelected({isSelected : false, uid : null, uname: null});
     }
 
     const controlParentToggle = () =>{
@@ -183,7 +237,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                                        className={"dmSearchInput"}
                                        ref={$chatSearch}
                                        onChange={onChatRoomSearchHandler}/>
-                                <button className={"dmSearchButton"}>
+                                <button className={"dmSearchButton"}
+                                        onClick={createChatRoomButtonHandler}>
                                     +
                                 </button>
                             </div>
