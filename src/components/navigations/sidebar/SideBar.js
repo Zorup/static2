@@ -160,7 +160,11 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                 `${process.env.REACT_APP_API_URL}/chat/${loginUserInfo.userId}/rooms`,
                 { withCredentials: true }
                 );
-                setChatRooms(response.data);
+                if(response.data !== ''){
+                    setChatRooms(response.data);
+                }else{
+                    setChatRooms([]);
+                }
             }catch(e){}
         };
 

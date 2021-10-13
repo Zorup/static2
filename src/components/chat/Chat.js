@@ -80,7 +80,6 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
                 showChatUI.userInfo.forEach(user => {
                     publish(JSON.stringify(response.data), user.userId);
                 });
-                publish(JSON.stringify(response.data), 2);
                 setMessageInput("");
                 insertNewChatLogs(response.data);
             }catch(e){}
