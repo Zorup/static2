@@ -1,7 +1,8 @@
 import CreateComment from "./CreateComment";
 import Comment from "./Comment";
-import axios from 'axios';
 import {useState} from "react"
+
+import {postPostLikes} from "../../service/fetch"
 
 function Post({post, pushTargetUsers}){
     const [likes, setLikes] = useState(post.likes);
@@ -13,13 +14,7 @@ function Post({post, pushTargetUsers}){
     
     const clickLikeHandler = async()=>{
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/main/v1/like?postId=${post.postId}`,
-                null,
-                {
-                    withCredentials: true
-                }
-            );
+            const response = await postPostLikes(post.postId);
             setLikes(response.data.data)
         }catch(e){
         }

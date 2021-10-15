@@ -1,18 +1,11 @@
 import {connect} from 'react-redux';
-import axios from 'axios';
 import {logOut} from '../../../module/login'
 import {clearMentionList} from '../../../module/mention'
-
+import {postLogOut} from '../../../service/fetch'
 function UserInformation({loginUserInfo, clearMentionList, clearUserInfo}){
     const onClickLogOut = async () =>{
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/auth/v1/logout/user/${loginUserInfo.userId}`,
-                null,
-                {
-                    withCredentials: true
-                }
-            );
+            await postLogOut(loginUserInfo.userId);
             clearMentionList();
             clearUserInfo();
         }catch(e){}

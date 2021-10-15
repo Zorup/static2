@@ -5,13 +5,13 @@ import Post from '../components/Post/Post';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
+import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
+import {connect} from 'react-redux';
 
-
-import axios from 'axios';
 import $ from 'jquery';
 require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
-function GroupPage() {
+function GroupPage({loginUserInfo}) {
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
@@ -81,10 +81,7 @@ function GroupPage() {
     useEffect(()=>{
       const fetchUserLists = async()=>{
       try{
-          const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/main/v1/group/users`,
-            {withCredentials: true}
-          );
+          const response = await getUserListApi();
           setUserList(response.data.list);
         }catch(e){
         }
@@ -95,12 +92,13 @@ function GroupPage() {
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
-          const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/main/v1/forum/${forumId}/postview`,
-            { withCredentials: true }
-          );
+          const response = await getPostView(forumId);
           setPosts(response.data.list);
         }catch(e){
+          if(e.response.data === 'Expired'){
+            const isSuccess = await reIssuedTokenApi(loginUserInfo.refreshToken);
+            console.log(isSuccess)
+          }
         }
       };
       fetchPosts();
@@ -157,4 +155,10 @@ function GroupPage() {
     );
   }
 
-export default GroupPage
+const mapStateToProps = state => ({
+    loginUserInfo: state.checkLogin.loginUserInfo,
+});
+
+export default connect(
+  mapStateToProps,
+)(GroupPage);

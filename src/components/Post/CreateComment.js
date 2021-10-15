@@ -1,8 +1,8 @@
 import './CreatePost.css'
-import axios from 'axios';
 import {useRef} from "react"
 import {getNotiRequestData, UserInformation} from "../../module/mention"
 import {connect} from 'react-redux';
+import {postComment, postPushMessage} from "../../service/fetch"
 
 function CreateComment({postId, comments, setComments, pushTargetUsers, sender}){
     const textAreaRef = useRef();
@@ -11,16 +11,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
         params.append('postId', postId);
         params.append('content', textAreaRef.current.value);
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/main/v1/comment`,
-                params,
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                    withCredentials: true
-                }
-            );
+            const response = await postComment(params);
             textAreaRef.current.value="";
             const newComments = [...comments];
             newComments.push(response.data.data);
@@ -32,13 +23,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
                 let pushRequestData = getNotiRequestData(new UserInformation(sender.userId, sender.name), 
                                                         pushTargetUsers, postId, true);
                 
-                await axios.post(
-                    `${process.env.REACT_APP_API_URL}/fcm/v1/fcm-msg`,
-                    pushRequestData,
-                    {
-                        withCredentials: true
-                    }
-                );
+                await postPushMessage(pushRequestData);
                 delete pushTargetUsers[postId];
             }
         }catch(e){

@@ -1,9 +1,9 @@
 import './CreatePost.css'
 import {connect} from 'react-redux';
-import axios from 'axios';
 import {useState, useMemo, useRef} from "react"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
+import {postPost} from "../../service/fetch"
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
@@ -15,21 +15,15 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
 
     const creatPost = async()=>{
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/main/v1/post`,
-                {
-                    "forumId" : forumId,
-                    "groupId" : groupId,
-                    "content" : content
-                },
-                {
-                    withCredentials: true
-                }
-            );
-            console.log(content);
+            const data = {
+                "forumId" : forumId,
+                "groupId" : groupId,
+                "content" : content
+            };
+            const response = await postPost(data);
             setContent("");
             const newPosts = [...posts];
-            newPosts.splice(0,0,response.data.data);
+            newPosts.splice(0, 0, response.data.data);
             setPosts(newPosts);
         }catch(e){
         }

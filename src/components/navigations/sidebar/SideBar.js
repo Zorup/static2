@@ -1,7 +1,7 @@
 import './SideBar.css'
 import React, { useState, useEffect, useRef } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
-import axios from 'axios';
+import {getForumList, getChatRooms, postChatRoom, getChatLogs} from '../../../service/fetch'
 import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
@@ -40,10 +40,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     const preDisPlayChatRoomHandler = async (roomId, roomName, targetUsers) => {
         try{
             let currentChatLogs = [];
-            const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/chat/${roomId}/chat-logs`,
-                { withCredentials: true }
-            );
+            const response = await getChatLogs(roomId);
             if(response.data !== ""){
                 currentChatLogs = response.data;
             }
@@ -91,13 +88,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
 
     const addOpenRoom = async (data) =>{
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/chat/room`,
-                data,
-                {
-                    withCredentials: true
-                }    
-            );
+            const response = await postChatRoom(data);
             const newState = [...chatRooms];
             newState.push(response.data);
             setChatRooms(newState);
@@ -145,10 +136,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     useEffect(()=>{
         const fetchForumList = async()=>{
           try{
-            const response = await axios.get(
-            `${process.env.REACT_APP_API_URL}/main/v1/forum`,
-              { withCredentials: true }
-            );
+            const response = await getForumList();
             setForumList(response.data.forumList);
           }catch(e){
           }
@@ -156,10 +144,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
         
         const fetchChatRooms = async()=>{
             try{
-                const response = await axios.get(
-                `${process.env.REACT_APP_API_URL}/chat/${loginUserInfo.userId}/rooms`,
-                { withCredentials: true }
-                );
+                const response = await getChatRooms(loginUserInfo.userId);
                 if(response.data !== ''){
                     setChatRooms(response.data);
                 }else{

@@ -3,9 +3,7 @@ const LOG_OUT = 'LOG_OUT'
 
 export const logIn = (input) => ({type: LOG_IN, loginUserInfo: input});
 export const logOut = () => ({type: LOG_OUT});
-export const reIssuedToken = ()=>{
 
-};
 const initialState = {
     loginUserInfo : {},
     isLogin : false
