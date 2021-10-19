@@ -30,7 +30,16 @@ function SideBar({toggle, setToggle, setForum}){
     ));
 
     return(
+<<<<<<< Updated upstream
         <>
+=======
+        <div id="sideBar">
+            {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
+                                          setShowChatUI={setShowChatUI} 
+                                          initSocket={initSocket} 
+                                          setInitSocket={setInitSocket}>
+                                    </Chat> : null}
+>>>>>>> Stashed changes
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
                     <div className="sidebar-brand-icon rotate-n-15">
@@ -78,7 +87,7 @@ function SideBar({toggle, setToggle, setForum}){
 
             <CreatGroupModal forumList={forumList} setForumList={setForumList}/>
             <DeleteGroupModal forumList={forumList} setForumList={setForumList}/>
-        </>
+        </div>
     )
 }
 
