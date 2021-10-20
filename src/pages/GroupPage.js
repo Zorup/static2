@@ -151,7 +151,7 @@ function GroupPage({loginUserInfo}) {
           <i className="fas fa-angle-up"></i>
         </button>
         
-      </>
+      </div>
     );
   }
 

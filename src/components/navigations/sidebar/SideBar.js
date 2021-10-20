@@ -162,7 +162,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     ));
 
     return(
- <>
+        <div id="sideBar">
             {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
                                           setShowChatUI={setShowChatUI} 
                                           initSocket={initSocket} 
