@@ -1,5 +1,6 @@
 export default function ForumButton({setForum, forum}){
     const handleOnClick = () => {
+        window.location.hash = `forum/${forum.forumId}`;
         setForum(forum.forumId);
     };
 

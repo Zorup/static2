@@ -1,22 +1,13 @@
-import axios from 'axios';
 import { useState, useCallback } from 'react';
 import $ from 'jquery';
+import {postForumApi, deleteForumApi} from '../../../service/fetch'
 
 export function CreatGroupModal({forumList, setForumList}){
-
     const [forumName, setForumName] = useState("");
     const onChangeForumName = useCallback (e=>setForumName(e.target.value), []);
     const createForum = async()=>{
         try{
-            //TODO 전체 axios는 함수로 한번 감싸서 함수형태로 만든 후 try에서 호출하도록 변경할것.
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/main/v1/forum?forumName=${forumName}`,
-                null,
-                {
-                    withCredentials: true
-                }
-            );
-            console.log(response);
+            const response = await postForumApi(forumName);
             setForumName("");
             setForumList([
                 ...forumList,
@@ -24,12 +15,6 @@ export function CreatGroupModal({forumList, setForumList}){
             ]);
             $('#subGroup').modal('hide');
         }catch(e){
-            /** TODO
-             * 해당 영역에 들어갈것 공통 함수로 만들 것 
-             * paramter :: error response, 위에서 정의한 axios를 callback함수로 받음 
-             * response data 체크 후 로그아웃 처리할 것인지, 
-             * refresh api를 호출해서 토큰을 재발급받은후  callback함수를 실행할 것인지 결정하도록 구성 
-            */
             if(e.response.data === "Expired"){
                 console.log("정상적인 토큰이지만 만료됨");
             } else{
@@ -72,25 +57,17 @@ export function DeleteGroupModal({forumList, setForumList}){
 
     const deleteForum = async()=>{
         if(deleteTarget.size === 0) return;
-        
         const params = new URLSearchParams();
         for(let item of deleteTarget){
             params.append('forumId', item);
         }
 
         try{
-            const response = await axios.delete(
-                'http://localhost:8081/main/v1/forum',
-                {
-                    data : params,
-                    withCredentials: true
-                },
-                {
-                    headers: {
-                        'Content-Type': 'application/x-www-form-urlencoded',
-                    },
-                }
-            );
+            const data = {
+                data : params,
+                withCredentials: true
+            };
+            await deleteForumApi(data);
             setForumList(forumList.filter(item=> !deleteTarget.has(item.forumId)));
             setDeleteTarget(new Set());
             $('#deleteSmallGroup').modal('hide');

@@ -1,9 +1,8 @@
 import React, { useState, useCallback } from 'react';
-import axios from 'axios';
-
 import {connect} from 'react-redux';
 import {logIn} from '../module/login'
 import {getInitMentionByLogin} from '../module/mention'
+import {logInApi, getInitialMentionListsApi} from '../service/fetch'
 
 function LoginPage({logIn, setUserMentionAlert}){
     const [userId, setUserId] = useState('');
@@ -20,22 +19,12 @@ function LoginPage({logIn, setUserMentionAlert}){
         };
 
         try{
-            const response = await axios.post(
-              'http://localhost:8081/auth/v1/login', 
-              params,
-              {
-                withCredentials: true
-              }
-            );
             //로그인 시 초기 알람 화면과 관련된 리스트, 유저 정보를 가져와서 세션 스토리지에 넣는다.
-            const mentionRequest = await axios.get(
-                `http://localhost:8081/fcm/v1/user/${response.data.data.userId}/mentions`, 
-                {
-                    withCredentials: true
-                }
-            );
+            const response = await logInApi(params);
+            const mentionRequest = await getInitialMentionListsApi(response.data.data.userId);
             setUserMentionAlert(mentionRequest.data);
             logIn(response.data.data);
+            window.location.hash = `forum/1`;
           }catch(e){
               alert("login 실패");
           }

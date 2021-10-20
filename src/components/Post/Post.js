@@ -1,8 +1,9 @@
 import CreateComment from "./CreateComment";
 import Comment from "./Comment";
-import axios from 'axios';
 import {useState} from "react"
 import './post.css'
+
+import {postPostLikes} from "../../service/fetch"
 
 function Post({post, pushTargetUsers}){
     const [likes, setLikes] = useState(post.likes);
@@ -20,13 +21,7 @@ function Post({post, pushTargetUsers}){
 
     const clickLikeHandler = async()=>{
         try{
-            const response = await axios.post(
-                `${process.env.REACT_APP_API_URL}/main/v1/like?postId=${post.postId}`,
-                null,
-                {
-                    withCredentials: true
-                }
-            );
+            const response = await postPostLikes(post.postId);
             setLikes(response.data.data)
         }catch(e){
         }
@@ -46,8 +41,8 @@ function Post({post, pushTargetUsers}){
                     <p className="comment-text border border-2 rounded">
                     <div dangerouslySetInnerHTML={ { __html: post.content } }>
                         {/* html로 받아오기 위해서 */}
+
                     </div>
-                    </p>
                 </div>
 
                 <div className="bg-white">

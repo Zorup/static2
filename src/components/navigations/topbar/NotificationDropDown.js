@@ -1,8 +1,8 @@
 import React, {useState, useCallback} from 'react';
 import './Notification.css'
-import axios from "axios";
 import {connect} from 'react-redux';
 import {setReadYnTrue} from '../../../module/mention'
+import {patchMentionReadYn} from '../../../service/fetch'
 
 function NotificationDropDown({item, clickRender}){
     const [readYn, setReadYn] = useState(item.readYn);
@@ -11,11 +11,7 @@ function NotificationDropDown({item, clickRender}){
         e.stopPropagation();
         try{
             if(!readYn){
-                await axios.patch(
-                    `http://localhost:8081/fcm/v1/notification/${item.notificationId}`,
-                    null,
-                    { withCredentials: true }
-                );
+                await patchMentionReadYn(item.notificationId);
                 clickRender(item.notificationId);
                 setReadYn(true);
             }

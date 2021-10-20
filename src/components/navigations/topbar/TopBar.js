@@ -20,7 +20,6 @@ function TopBar({toggle, setToggle, mentionList}){
 
             <ul className="navbar-nav ml-auto">
                 <Notification section="Alerts Center" dropDownList={mentionList} icon="fa-bell"/>
-                <Notification section="Message Center" icon="fa-envelope"/>
                 <div className="topbar-divider d-none d-sm-block"></div>
                 <UserInformation/>
             </ul>

@@ -1,5 +1,5 @@
 import {useState} from "react"
-import axios from 'axios';
+import {signInApi} from '../service/fetch'
 
 export default function SignInPage() {
     const [signInParam, setSignInParam] = useState({
@@ -27,21 +27,13 @@ export default function SignInPage() {
     }
 
     const onClickHandler = async ()=>{
-        console.log(signInParam);
         if(validPassword!==password){
             alert("입력한 비밀번호가 재입력한 비밀번호와 일치하지 않습니다.")
             return;
         }
         try{
-            const response = await axios.post(
-                'http://localhost:8081/auth/v1/signin',
-                signInParam,
-                {
-                    withCredentials: true
-                }
-            );
+            const response = await signInApi(signInParam);
             alert("회원가입이 완료되었습니다.");
-            console.log(response);
             window.location.href="/"
         } catch(e){
             alert("서버 연결이 원할하지 않습니다.");

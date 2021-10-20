@@ -7,23 +7,38 @@ import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
 import './groupPage.css'
 
-import axios from 'axios';
+import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
+import {connect} from 'react-redux';
+
 import $ from 'jquery';
 require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
-function GroupPage() {
-    
+function GroupPage({loginUserInfo}) {
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
     const [groupId] = useState(1);
     const [userList, setUserList] = useState([]);
+    const [isSelected, setIsSelected] = useState({isSelected : false, uid : null, uname: null});
+
     const pushTargetUsers = {};
 
     const controlSideBar = (state) => {
       setToggle(state);
     };
-    
+
+    const movePageTop = ()=>{
+      window.scrollTo({top:0, behavior: 'smooth'});
+    };
+
+    if(window.location.hash !== undefined && window.location.hash.length > 5){
+      const newId = parseInt(window.location.hash.split('/')[1]);
+      if(!isNaN(newId) && (newId !== forumId)){
+        window.location.hash = `forum/${newId}`;
+        setForumId(newId);
+      }
+    }
+
     useEffect(()=>{
       $('.comment-input').suggest('@', {
         data: userList,
@@ -47,15 +62,28 @@ function GroupPage() {
           }
         }
       });
+
+      $('.dmSearchInput').suggest('@', {
+        data: userList,
+        map: function(user) {
+          return {
+            value: user.name,
+            text: '<strong>'+user.name+'</strong> <small>'+user.loginId+'</small> <small hidden>'+user.userId+'</small>'
+          }
+        },
+
+        onselect: function (e, item){
+          const userInfoArr = item.text.split(" ");
+          const userId = Number.parseInt(userInfoArr[2]);
+          setIsSelected({isSelected : true, uid : userId, uname: '@'+userInfoArr[0]});
+        }
+      });
     });
 
     useEffect(()=>{
       const fetchUserLists = async()=>{
       try{
-          const response = await axios.get(
-            'http://localhost:8081/main/v1/group/users',
-            {withCredentials: true}
-          );
+          const response = await getUserListApi();
           setUserList(response.data.list);
         }catch(e){
         }
@@ -66,12 +94,13 @@ function GroupPage() {
     useEffect(()=>{
       const fetchPosts = async()=>{
         try{
-          const response = await axios.get(
-            `http://localhost:8081/main/v1/forum/${forumId}/postview`,
-            { withCredentials: true }
-          );
+          const response = await getPostView(forumId);
           setPosts(response.data.list);
         }catch(e){
+          if(e.response.data === 'Expired'){
+            const isSuccess = await reIssuedTokenApi(loginUserInfo.refreshToken);
+            console.log(isSuccess)
+          }
         }
       };
       fetchPosts();
@@ -83,7 +112,12 @@ function GroupPage() {
 
     return (
       <div id="wrapper">
-        <SideBar toggle={toggle} setToggle={controlSideBar} setForum={setForumId}/>
+          <SideBar toggle={toggle} 
+                  setToggle={controlSideBar} 
+                  setForum={setForumId}
+                  userList={userList}
+                  isSelected={isSelected}
+                  setIsSelected={setIsSelected}/>
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
@@ -100,19 +134,31 @@ function GroupPage() {
                     </div>
                   </div>
                 </div>
-              </div>
-          </div>
+            </div>
 
-          <footer className="sticky-footer bg-white">
-                  <div className="container my-auto">
-                      <div className="copyright text-center my-auto">
-                          <span>Copyright &copy; 2021 HONIK JP GroupWare</span>
-                      </div>
-                  </div>
-          </footer>
+            <footer className="sticky-footer bg-white">
+                    <div className="container my-auto">
+                        <div className="copyright text-center my-auto">
+                            <span>Copyright &copy; 2021 HONIK JP GroupWare</span>
+                        </div>
+                    </div>
+            </footer>
+          </div>
         </div>
-      </div>
+        
+        
+        <button className="scroll-to-top rounded" onClick={movePageTop}>
+          <i className="fas fa-angle-up"></i>
+        </button>
+        
+      </>
     );
   }
 
-export default GroupPage
+const mapStateToProps = state => ({
+    loginUserInfo: state.checkLogin.loginUserInfo,
+});
+
+export default connect(
+  mapStateToProps,
+)(GroupPage);
