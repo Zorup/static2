@@ -5,6 +5,7 @@ import Post from '../components/Post/Post';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
+import './groupPage.css'
 
 import axios from 'axios';
 import $ from 'jquery';
@@ -87,7 +88,7 @@ function GroupPage() {
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
               <TopBar toggle={toggle} setToggle={controlSideBar}/>
-              <div className="container-fluid">
+              <div className="container-fluid" id="mainFeed">
                 <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
                 <hr></hr>
                 <div className="container">

@@ -1,19 +1,9 @@
-#searchBar {
-    top: 18px;
-    position: absolute;
-    flex: 1;
-}
-
 #searchBarForm {
     margin-left: 220px;
 }
 
 @media (max-width: 768px) {
-    #searchBar {
-        top: 18px;
-        position: absolute;
-    }
     #searchBarForm {
-        margin-left: 80px;
+        margin-left: 50px;
     }
 }
