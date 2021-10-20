@@ -1,0 +1,9 @@
+#searchBarForm {
+    margin-left: 220px;
+}
+
+@media (max-width: 768px) {
+    #searchBarForm {
+        margin-left: 50px;
+    }
+}

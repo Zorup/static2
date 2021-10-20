@@ -1,0 +1,10 @@
+#mainFeed {
+    margin-top: 100px;
+    margin-left: 200px;
+}
+
+@media (max-width: 768px) {
+    #mainFeed {
+        margin-left: 50px;
+    }
+}

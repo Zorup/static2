@@ -1,0 +1,15 @@
+  .show-menu {
+      display: block;
+  }
+  
+  .hide-menu {
+      display: none;
+  }
+  
+  .colorPurple {
+      color: purple !important;
+  }
+  
+  .colorBlue {
+      color: #4e73df !important;
+  }

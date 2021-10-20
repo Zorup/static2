@@ -5,6 +5,8 @@ import Post from '../components/Post/Post';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
 import React, { useState, useEffect } from 'react';
+import './groupPage.css'
+
 import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
 import {connect} from 'react-redux';
 
@@ -109,27 +111,25 @@ function GroupPage({loginUserInfo}) {
     ));
 
     return (
-      <>
-        <div id="wrapper">
+      <div id="wrapper">
           <SideBar toggle={toggle} 
                   setToggle={controlSideBar} 
                   setForum={setForumId}
                   userList={userList}
                   isSelected={isSelected}
                   setIsSelected={setIsSelected}/>
-    
-          <div id="content-wrapper" className="d-flex flex-column">
-            <div id="content">
-                <TopBar toggle={toggle} setToggle={controlSideBar}/>
-                <div className="container-fluid">
-                  <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
-                  <hr></hr>
-                  <div className="container">
-                    <div className="d-flex row">
-                      <div className="col-md-7">
-                        <div className="d-flex flex-column comment-section">
-                          {postList}
-                        </div>
+  
+        <div id="content-wrapper" className="d-flex flex-column">
+          <div id="content">
+              <TopBar toggle={toggle} setToggle={controlSideBar}/>
+              <div className="container-fluid" id="mainFeed">
+                <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
+                <hr></hr>
+                <div className="container">
+                  <div className="d-flex row">
+                    <div className="col-md-7">
+                      <div className="d-flex flex-column comment-section">
+                        {postList}
                       </div>
                     </div>
                   </div>

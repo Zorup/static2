@@ -162,7 +162,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     ));
 
     return(
-        <>
+ <>
             {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
                                           setShowChatUI={setShowChatUI} 
                                           initSocket={initSocket} 
@@ -244,7 +244,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
 
             <CreatGroupModal forumList={forumList} setForumList={setForumList}/>
             <DeleteGroupModal forumList={forumList} setForumList={setForumList}/>
-        </>
+        </div>
     )
 }
 const mapStateToProps = state => ({

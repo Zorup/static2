@@ -1,17 +1,24 @@
 import CreateComment from "./CreateComment";
 import Comment from "./Comment";
 import {useState} from "react"
+import './post.css'
 
 import {postPostLikes} from "../../service/fetch"
 
 function Post({post, pushTargetUsers}){
     const [likes, setLikes] = useState(post.likes);
     const [comments, setComments] = useState(post.comments);
+    const [isOpen, setMenu] = useState(false);
 
     const commentList = comments.map(item => (
         <Comment comment={item} key={item.commentId}/>
     ));
-    
+        
+    const toggleComment = () => {
+        console.log('good');
+        setMenu(isOpen => !isOpen); // on,off 개념 boolean
+    }
+
     const clickLikeHandler = async()=>{
         try{
             const response = await postPostLikes(post.postId);
@@ -31,10 +38,10 @@ function Post({post, pushTargetUsers}){
                     </div>
                 </div>
                 <div className="mt-2">
-                    <div className="comment-text">
-                        <div dangerouslySetInnerHTML={ { __html: post.content } }>
-                            {/* html로 받아오기 위해서 */}
-                        </div>
+                    <p className="comment-text border border-2 rounded">
+                    <div dangerouslySetInnerHTML={ { __html: post.content } }>
+                        {/* html로 받아오기 위해서 */}
+
                     </div>
                 </div>
 
@@ -45,15 +52,18 @@ function Post({post, pushTargetUsers}){
                             <span className="testLike">{likes}</span>
                             <span className="ml-1">Like</span>
                         </a>
-                        <a className="p-2 ">
+                        <a className={isOpen ? "colorPurple p-2 target" : "p-2 target colorBlue"}  onClick={toggleComment}>
                             <i className="fa fa-comment"></i>
                             <span>{comments.length}</span>
-                            <span className="ml-1">Comment</span>
+                            <span className="ml-1" >Comment </span>
+                            {isOpen ? <span>숨기기</span> : <span>보기</span>}
                         </a>
                     </div>
                 </div>
             </div>
+            <div className={isOpen ? "show-menu" : "hide-menu"}>
             {commentList}
+            </div>
             <CreateComment postId={post.postId} comments={comments} setComments={setComments} pushTargetUsers={pushTargetUsers}/>
         </>
     )
