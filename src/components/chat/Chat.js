@@ -109,11 +109,15 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
     }
 
     return (
-    <Rnd default={{x: 1100, y: 440+window.scrollY, width: 320, height:200, position:'fixed'}} style={{position:"fixed", zIndex:50}}>
+    <Rnd default={{x: 1160, y: 300, width: 320, height:200, position:'fixed'}} 
+         style={{position:"fixed", zIndex:50}}
+         dragHandleClassName={'handle'}
+         >
             <div className="chatbox-holder">
                 <div className="chatbox">
-                    <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
-
+                    <div className="handle">
+                        <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
+                    </div>
                     <div className="chat-messages">
                         {chatLists}
                     </div>
