@@ -13,3 +13,7 @@
   .colorBlue {
       color: #4e73df !important;
   }
+  
+  .feeds {
+      min-height: 70px;
+  }

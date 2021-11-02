@@ -23,7 +23,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
     const [messageInput, setMessageInput] = useState("");
     const [client, setClient] = useState(null);
     const [newMessage, setNewMessage] = useState(null);
-
+    
     const publish = (msg, targetId) => {
         if (!client) return;
         client.send(`/app/send/${targetId}`, {}, msg);

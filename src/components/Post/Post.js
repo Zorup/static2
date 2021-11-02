@@ -37,7 +37,7 @@ function Post({post, pushTargetUsers}){
                         <span className="date text-black-50">{post.createdDate} </span>
                     </div>
                 </div>
-                <div className="mt-2  border border-2 rounded">
+                <div className="mt-2  border border-2 rounded p-1 feeds">
                     <div dangerouslySetInnerHTML={ { __html: post.content } }>
                         {/* html로 받아오기 위해서 */}
 
