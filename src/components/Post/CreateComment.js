@@ -31,7 +31,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
     }
 
     return(
-        <div className="bg-white mb-3 p-2 InputComment">
+        <div className="bg-white mb-3 p-2 InputComment border-top">
             <form className="comment-write-form">
                 <div className="d-flex flex-row align-items-start" data-id={postId}>
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="40"></img>

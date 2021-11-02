@@ -29,7 +29,7 @@ function Post({post, pushTargetUsers}){
 
     return(
         <>
-            <div className="bg-white p-2">
+            <div className="bg-white pt-2 pl-2 pr-2">
                 <div className="d-flex flex-row user-info">
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="60" height="60"/>
                     <div className="d-flex flex-column justify-content-start ml-2">
@@ -37,7 +37,7 @@ function Post({post, pushTargetUsers}){
                         <span className="date text-black-50">{post.createdDate} </span>
                     </div>
                 </div>
-                <div className="mt-2  border border-2 rounded p-1 feeds">
+                <div className="mt-2 p-1 feeds">
                     <div dangerouslySetInnerHTML={ { __html: post.content } }>
                         {/* html로 받아오기 위해서 */}
 
