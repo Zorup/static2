@@ -15,7 +15,6 @@ function Post({post, pushTargetUsers}){
     ));
         
     const toggleComment = () => {
-        console.log('good');
         setMenu(isOpen => !isOpen); // on,off 개념 boolean
     }
 
@@ -47,12 +46,12 @@ function Post({post, pushTargetUsers}){
                 <div className="bg-white">
                     <div className="d-flex flex-row fs-12">
                         <a className="p-2 like-button" onClick={clickLikeHandler}>
-                            <i className="fa fa-thumbs-up"></i>
+                            <i className="fa fa-thumbs-up mr-1"></i>
                             <span className="testLike">{likes}</span>
                             <span className="ml-1">Like</span>
                         </a>
                         <a className={isOpen ? "colorPurple p-2 target" : "p-2 target colorBlue"}  onClick={toggleComment}>
-                            <i className="fa fa-comment"></i>
+                            <i className="fa fa-comment mr-1"></i>
                             <span>{comments.length}</span>
                             <span className="ml-1" >Comment </span>
                             {isOpen ? <span>숨기기</span> : <span>보기</span>}

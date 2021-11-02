@@ -17,3 +17,7 @@
   .feeds {
       min-height: 70px;
   }
+  
+  .name {
+      font-size: 18px;
+  }
