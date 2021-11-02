@@ -22,7 +22,7 @@
 
 .abtn:focus {
     border: none;
-    outline:none;
+    outline: none;
 }
 
 .dmIcon {
@@ -56,4 +56,17 @@
 #sideBar {
     position: fixed;
     z-index: 3;
+}
+
+.modalBtn {
+    display: block;
+    margin: auto;
+}
+
+.dmSearchInpu {
+    max-width: 130px;
+}
+
+.dmSearchToggle {
+    max-width: 110px;
 }

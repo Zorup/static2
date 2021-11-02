@@ -128,7 +128,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     };
 
     const dmUserList = chatRooms.map(room =>(
-        <a className="custom-collapse-item abtn" 
+        <a className="custom-collapse-item abtn text-center" 
             key={room.roomId} 
             data-rid={room.roomId}
             onClick={onClickDM}>{room.roomName}</a>
@@ -201,8 +201,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                     </a>
                     <div id="collapsePages" className="collapse"  data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded" >
-                            <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
-                            <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
+                            <button className="custom-collapse-item abtn modalBtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
+                            <button className="custom-collapse-item abtn modalBtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
                         </div>
                     </div>
                 </li>
@@ -224,7 +224,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                         <div className="bg-white py-2 collapse-inner rounded" >
                             <div className="dmSearch">
                                 <input placeholder={"@채팅 유저 추가"}
-                                       className={"dmSearchInput"}
+                                       className={toggle ? "dmSearchToggle" : "dmSearchInpu"}
                                        ref={$chatSearch}
                                        onChange={onChatRoomSearchHandler}/>
                                 <button className={"dmSearchButton"}
