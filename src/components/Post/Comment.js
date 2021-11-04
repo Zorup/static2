@@ -3,7 +3,7 @@ import './Comment.css'
 function Comment({comment}){
     return (
     <>
-        <div className="comment">
+        <div className="comment border border-light rounded">
             <div className="media">
                 <div className="media-left">
                     <a href="#">
@@ -12,7 +12,7 @@ function Comment({comment}){
                 </div>
                 <div className="p-2 media-body" >
                     <span className="d-block font-weight-bold name" >
-                        <span>{comment.userName}</span>
+                        <span className="mr-1">{comment.userName}</span>
                         <a href="#" className="anchor-time">{comment.createdDate}</a>
                     </span>
                     <div>

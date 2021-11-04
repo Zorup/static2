@@ -20,6 +20,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             chatLogs: [],
         });
 
+    
     const onClickDM = async (e)=>{
         const targetUsers = getTargetUsers(e.target.dataset.rid);
         preDisPlayChatRoomHandler(e.target.dataset.rid, e.target.text, targetUsers);
@@ -127,7 +128,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     };
 
     const dmUserList = chatRooms.map(room =>(
-        <a className="custom-collapse-item abtn" 
+        <a className="custom-collapse-item abtn text-center" 
             key={room.roomId} 
             data-rid={room.roomId}
             onClick={onClickDM}>{room.roomName}</a>
@@ -162,7 +163,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     ));
 
     return(
-        <>
+        <div id="sideBar">
             {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
                                           setShowChatUI={setShowChatUI} 
                                           initSocket={initSocket} 
@@ -200,8 +201,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                     </a>
                     <div id="collapsePages" className="collapse"  data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded" >
-                            <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
-                            <button className="custom-collapse-item abtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
+                            <button className="custom-collapse-item abtn modalBtn" data-toggle="modal" data-target="#subGroup">소그룹 추가</button>
+                            <button className="custom-collapse-item abtn modalBtn" data-toggle="modal" data-target="#deleteSmallGroup">소그룹 삭제</button>
                         </div>
                     </div>
                 </li>
@@ -209,21 +210,21 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                 <hr className="sidebar-divider d-none d-md-block"></hr>
 
                 <div className="sidebar-heading">
-                    다이렉트 메시지
+                    {toggle ? <span> DM </span> : <span> 다이렉트 메시지 </span>}
                 </div>
 
                 <li className="nav-item">
                     <a className="nav-link collapsed" href="#" data-toggle="collapse" data-target="#dm-target-user"
                     aria-expanded="false" aria-controls="dm-target-user">
-                        <img className="dmIcon" src={process.env.PUBLIC_URL + "/send.png"}/>
+                        <img className="dmIcon  mr-1" src={process.env.PUBLIC_URL + "/send.png"}/>
                         {/**이미지 색상 다른 아이콘 색이랑 맞게 수정해서 넣기 */}
-                        <span> 다이렉트 메시지</span>
+                        {toggle ? <span> DM </span> : <span> 다이렉트 메시지 </span>}
                     </a>
                     <div id="dm-target-user" className="collapse" data-parent="#accordionSidebar">
                         <div className="bg-white py-2 collapse-inner rounded" >
                             <div className="dmSearch">
                                 <input placeholder={"@채팅 유저 추가"}
-                                       className={"dmSearchInput"}
+                                       className={toggle ? "dmSearchToggle" : "dmSearchInpu"}
                                        ref={$chatSearch}
                                        onChange={onChatRoomSearchHandler}/>
                                 <button className={"dmSearchButton"}
@@ -244,7 +245,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
 
             <CreatGroupModal forumList={forumList} setForumList={setForumList}/>
             <DeleteGroupModal forumList={forumList} setForumList={setForumList}/>
-        </>
+        </div>
     )
 }
 const mapStateToProps = state => ({

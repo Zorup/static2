@@ -3,6 +3,7 @@ import SearchBar from './SearchBar'
 import Notification from './Notification'
 import UserInformation from './UserInformation'
 import {connect} from 'react-redux';
+import './topBar.css'
 
 function TopBar({toggle, setToggle, mentionList}){
     const controlParentToggle = () =>{
@@ -10,7 +11,8 @@ function TopBar({toggle, setToggle, mentionList}){
     };
 
     return(
-        <nav className="navbar navbar-expand navbar-light navbar-fixed-top  bg-white topbar mb-4 static-top shadow w-100" id="topNavbar">
+        <div id="topBar">
+        <nav className="navbar navbar-expand navbar-light navbar-fixed-top bg-white topbar mb-4 static-top shadow w-100" id="topNavbar">
             <button id="sidebarToggleTop" className="btn btn-link d-md-none rounded-circle mr-3" onClick={controlParentToggle}>
                 <i className="fa fa-bars"></i>
             </button>
@@ -22,6 +24,7 @@ function TopBar({toggle, setToggle, mentionList}){
                 <UserInformation/>
             </ul>
         </nav>
+        </div>
     )
 }
 
