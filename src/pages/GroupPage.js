@@ -8,6 +8,7 @@ import React, { useState, useEffect } from 'react';
 import './groupPage.css'
 
 import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
+import {parseView} from '../service/parse'
 import {connect} from 'react-redux';
 
 import $ from 'jquery';
@@ -95,7 +96,8 @@ function GroupPage({loginUserInfo}) {
       const fetchPosts = async()=>{
         try{
           const response = await getPostView(forumId);
-          setPosts(response.data.list);
+          let views = await parseView(response.data.list)
+          setPosts(views);
         }catch(e){
           if(e.response.data === 'Expired'){
             const isSuccess = await reIssuedTokenApi(loginUserInfo.refreshToken);

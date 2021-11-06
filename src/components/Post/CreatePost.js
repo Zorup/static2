@@ -4,6 +4,7 @@ import {useState, useMemo, useRef} from "react"
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import {postPost} from "../../service/fetch"
+import {parseContents, parseView} from "../../service/parse"
 
 function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
@@ -15,46 +16,19 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
 
     const creatPost = async()=>{
         try{
-            const data = {
-                "forumId" : forumId,
-                "groupId" : groupId,
-                "content" : content
-            };
-            const response = await postPost(data);
+            let formData = await parseContents(content)
+            formData.append('forumId', forumId)
+            formData.append('groupId', groupId)
+            const response = await postPost(formData);
             setContent("");
+
             const newPosts = [...posts];
-            newPosts.splice(0, 0, response.data.data);
+            let newData = await parseView([response.data.data])
+            newPosts.splice(0, 0, ...newData);
             setPosts(newPosts);
         }catch(e){
         }
     }
-
-    /*const imageHandler = () => {
-        console.log('start');
-
-        const input = document.createElement('input');
-        input.setAttribute('type', 'file');
-        input.setAttribute('accept', 'image/*');
-        input.click();      // input 창 클릭
-
-        input.addEventListener('change', async() => {
-            const file = input.files[0];
-            const formData = new FormData();
-            formData.append('img', file);   // formdata로 변경
-
-            try{
-                const result = await axios.post(서버로 보낼 url 들어갈 자리 formData);
-            
-                const IMG_URL = result.data.url;    // data 들어간 url 받아오기
-
-                const editor = quillRef.current.getEditor();    
-                const range = editor.getSelection();        // 커서 위치
-                editor.insertEmbed(range, 'image', IMG_URL);  // 위치에 추가
-            } catch(error){
-                console.log('error');
-            }
-        });
-    }; */
 
     const modules = useMemo(() => { // usememo 사용, imagehandler 추가
         return {
@@ -64,9 +38,6 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
               ['bold', 'italic', 'underline', 'strike', 'blockquote'],
               ['image'],
             ],
-            handlers: {
-             // image: imageHandler,
-            },
           },
         };
       }, []);
