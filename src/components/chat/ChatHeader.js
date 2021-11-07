@@ -1,5 +1,5 @@
 import "./chat.css"
-export default function ChatHeader({showChatUI, setShowChatUI, setInitSocket}){
+export default function ChatHeader({showChatUI, setShowChatUI}){
     const onClickHandler = ()=>{
         setShowChatUI({
             isDisplay : false,
@@ -8,7 +8,6 @@ export default function ChatHeader({showChatUI, setShowChatUI, setInitSocket}){
             roomId :"",
             chatLogs: [],
         });
-        setInitSocket(false);
     }
 
     return (

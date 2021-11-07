@@ -6,28 +6,8 @@ import {connect} from 'react-redux';
 import { useState, useEffect } from "react";
 import {postChatMsg} from '../../service/fetch'
 
-var Stomp = require('stompjs');
-
-const connectPromise = () =>
-    new Promise((resolve, reject) => {
-        const socket = new WebSocket(`${process.env.REACT_APP_SOCK_URL}/chat/chat-conn`);
-        const stompClient = Stomp.over(socket);
-        stompClient.debug = (e) => {console.log(e)
-                                    };
-        const onConnect = () => resolve(stompClient);
-        const onError = error => reject(new Error(error));
-        stompClient.connect({}, onConnect, onError);
-    });
-
-function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSocket}){
+function Chat({showChatUI, setShowChatUI, loginUserInfo, stomp, setNewMessage, newMessage, isSubScribe, setIsSubScribe}){
     const [messageInput, setMessageInput] = useState("");
-    const [client, setClient] = useState(null);
-    const [newMessage, setNewMessage] = useState(null);
-    
-    const publish = (msg, targetId) => {
-        if (!client) return;
-        client.send(`/app/send/${targetId}`, {}, msg);
-    };
 
     const insertNewChatLogs = (item) => {
         const newChatLogs = [...showChatUI.chatLogs];
@@ -39,13 +19,14 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
         );
     }
 
-    /** subscribe */
     useEffect(()=>{
-        if (!client || client.counter !== 0) return;
-        client.subscribe(`/topic/${loginUserInfo.userId}`, function(m){
-            setNewMessage(JSON.parse(m.body))
-        });
-    });
+        if(isSubScribe === false){
+            stomp.subscribe(function(m){
+                setNewMessage(JSON.parse(m.body))
+            }, loginUserInfo.userId);
+            setIsSubScribe(true);
+        }
+    }, [isSubScribe]);
 
     useEffect(()=>{
         if(newMessage !== null){
@@ -73,7 +54,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
                 };
                 const response = await postChatMsg(param)
                 showChatUI.userInfo.forEach(user => {
-                    publish(JSON.stringify(response.data), user.userId);
+                    stomp.publish(JSON.stringify(response.data), user.userId);
                 });
                 setMessageInput("");
                 insertNewChatLogs(response.data);
@@ -81,20 +62,6 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
         }
         postChatLog();
     }
-
-    useEffect(()=>{
-        const connect = async () => {
-            try{
-                const stompClient = await connectPromise();
-                setClient(stompClient);
-            }catch(e){}
-        }
-
-        if(!initSocket){
-            connect();
-            setInitSocket(true);
-        }
-    },[initSocket, setInitSocket])
     
     let chatLists;
     if(showChatUI.chatLogs.length !== 0){
@@ -116,7 +83,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, initSocket, setInitSock
             <div className="chatbox-holder">
                 <div className="chatbox">
                     <div className="handle">
-                        <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI} setInitSocket={setInitSocket}></ChatHeader>
+                        <ChatHeader showChatUI={showChatUI} setShowChatUI={setShowChatUI}></ChatHeader>
                     </div>
                     <div className="chat-messages">
                         {chatLists}

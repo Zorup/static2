@@ -5,6 +5,7 @@ import {getForumList, getChatRooms, postChatRoom, getChatLogs} from '../../../se
 import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
+import useStomp from "../../../hooks/useStomp"
 
 function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelected, setIsSelected}){
     const $chatSearch = useRef();
@@ -19,7 +20,9 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             roomId : "",
             chatLogs: [],
         });
-
+    const [stomp] = useStomp()
+    const [newMessage, setNewMessage] = useState(null);
+    const [isSubScribe, setIsSubScribe] = useState(false);
     
     const onClickDM = async (e)=>{
         const targetUsers = getTargetUsers(e.target.dataset.rid);
@@ -167,7 +170,12 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             {showChatUI.isDisplay ? <Chat showChatUI={showChatUI} 
                                           setShowChatUI={setShowChatUI} 
                                           initSocket={initSocket} 
-                                          setInitSocket={setInitSocket}>
+                                          setInitSocket={setInitSocket}
+                                          stomp={stomp}
+                                          newMessage={newMessage}
+                                          setNewMessage={setNewMessage}
+                                          isSubScribe={isSubScribe}
+                                          setIsSubScribe={setIsSubScribe}>
                                     </Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">
