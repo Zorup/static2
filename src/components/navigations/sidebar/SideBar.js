@@ -69,7 +69,6 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             }
         } 
         else {
-            //드래그 땡겨서 지우면 삭제가 아니라 input으로 인식하네..
             if(currentInputValue === ''){
                 setAtSign(false);
                 setIsSelected({isSelected : false, uid : null, uname: null});
@@ -232,7 +231,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                         <div className="bg-white py-2 collapse-inner rounded" >
                             <div className="dmSearch">
                                 <input placeholder={"@채팅 유저 추가"}
-                                       className={toggle ? "dmSearchToggle" : "dmSearchInpu"}
+                                       className={toggle ? "dmSearchToggle" : "dmSearchInput"}
                                        ref={$chatSearch}
                                        onChange={onChatRoomSearchHandler}/>
                                 <button className={"dmSearchButton"}
