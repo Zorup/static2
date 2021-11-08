@@ -1,23 +1,30 @@
-  .show-menu {
-      display: block;
-  }
-  
-  .hide-menu {
-      display: none;
-  }
-  
-  .colorPurple {
-      color: purple !important;
-  }
-  
-  .colorBlue {
-      color: #4e73df !important;
-  }
-  
-  .feeds {
-      min-height: 70px;
-  }
-  
-  .name {
-      font-size: 18px;
-  }
+.show-menu {
+    display: block;
+}
+
+.hide-menu {
+    display: none;
+}
+
+.colorPurple {
+    color: purple !important;
+}
+
+.colorBlue {
+    color: #4e73df !important;
+}
+
+.feeds {
+    min-height: 70px;
+}
+
+.name {
+    font-size: 18px;
+}
+
+.postDrop {
+    float: right;
+    background-color: white;
+    border: none;
+    font-weight: bold;
+}

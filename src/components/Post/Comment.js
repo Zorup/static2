@@ -14,6 +14,7 @@ function Comment({comment}){
                     <span className="d-block font-weight-bold name" >
                         <span className="mr-1">{comment.userName}</span>
                         <a href="#" className="anchor-time">{comment.createdDate}</a>
+                        <button className="commentDelete">X</button>
                     </span>
                     <div>
                         <span>{comment.content}</span>

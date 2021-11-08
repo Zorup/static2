@@ -130,10 +130,15 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     };
 
     const dmUserList = chatRooms.map(room =>(
-        <a className="custom-collapse-item abtn text-center" 
-            key={room.roomId} 
-            data-rid={room.roomId}
-            onClick={onClickDM}>{room.roomName}</a>
+        <div>
+            <a className="custom-collapse-item abtn chatOpen"
+                key={room.roomId}
+                data-rid={room.roomId}
+                onClick={onClickDM}>
+                {room.roomName}
+            </a>
+            <button className="chatDelete">X</button>
+        </div>
     ));
 
     useEffect(()=>{
@@ -234,7 +239,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                                        className={toggle ? "dmSearchToggle" : "dmSearchInput"}
                                        ref={$chatSearch}
                                        onChange={onChatRoomSearchHandler}/>
-                                <button className={"dmSearchButton"}
+                                <button className={"dmSearchButton addChat"}
                                         onClick={createChatRoomButtonHandler}>
                                     +
                                 </button>

@@ -28,7 +28,8 @@ function Post({post, pushTargetUsers}){
 
     return(
         <>
-            <div className="bg-white pt-2 pl-2 pr-2">
+            <div className="bg-white pt-2 pl-2 pr-2">    
+                <button className="postDrop">X</button>
                 <div className="d-flex flex-row user-info">
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="60" height="60"/>
                     <div className="d-flex flex-column justify-content-start ml-2">

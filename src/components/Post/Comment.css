@@ -1,17 +1,24 @@
-.comment{
+.comment {
     background-color: white;
     border: 1px solid lightgray;
 }
 
-.photo-profile{
-    border:1px solid #DDD;
+.photo-profile {
+    border: 1px solid #DDD;
 }
 
-.anchor-username h4{
-    font-weight:bold;
+.anchor-username h4 {
+    font-weight: bold;
 }
 
-.anchor-time{
-    color:#ADB2BB;
-    font-size:0.8rem;
+.anchor-time {
+    color: #ADB2BB;
+    font-size: 0.8rem;
+}
+
+.commentDelete {
+    float: right;
+    border: none;
+    background-color: white;
+    color: gray;
 }

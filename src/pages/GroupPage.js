@@ -137,6 +137,8 @@ function GroupPage({loginUserInfo}) {
                   </div>
                 </div>
             </div>
+            
+            <button className="showMore">Show More ?</button>
 
             <footer className="sticky-footer bg-white">
                     <div className="container my-auto">
