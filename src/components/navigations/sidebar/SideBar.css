@@ -68,11 +68,7 @@
 }
 
 .dmSearchToggle {
-<<<<<<< Updated upstream
-    max-width: 110px
-}
 
-=======
     max-width: 110px;
 }
 
@@ -93,4 +89,4 @@
     background-color: black;
     color: white;
 }
->>>>>>> Stashed changes
+

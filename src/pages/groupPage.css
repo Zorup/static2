@@ -9,10 +9,6 @@
     }
 }
 
-<<<<<<< Updated upstream
-.modal-backdrop {
-    z-index: -1;
-=======
 .showMore {
     width: 300px;
     display: block;
@@ -24,5 +20,4 @@
 
 .container-fluid {
     color: black !important;
->>>>>>> Stashed changes
 }
