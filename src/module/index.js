@@ -3,6 +3,7 @@ import checkLogin from "./login";
 import mentionDispatcher  from './mention'
 import { persistReducer } from "redux-persist";
 import sessionStorage from "redux-persist/es/storage/session";
+import './index.css'
 
 const persistConfig = {
     key: 'root',

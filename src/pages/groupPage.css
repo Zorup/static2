@@ -8,3 +8,7 @@
         margin-left: 50px;
     }
 }
+
+.modal-backdrop {
+    z-index: -1;
+}
