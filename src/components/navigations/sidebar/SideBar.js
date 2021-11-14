@@ -1,7 +1,7 @@
 import './SideBar.css'
 import React, { useState, useEffect, useRef } from 'react';
 import {CreatGroupModal, DeleteGroupModal} from './SideBarModal'
-import {getForumList, getChatRooms, postChatRoom, getChatLogs} from '../../../service/fetch'
+import {getForumList, getChatRooms, postChatRoom, getChatLogs, deleteChatRoom} from '../../../service/fetch'
 import {connect} from 'react-redux';
 import ForumButton from './ForumButton';
 import Chat from '../../chat/Chat';
@@ -24,9 +24,57 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     const [newMessage, setNewMessage] = useState(null);
     const [isSubScribe, setIsSubScribe] = useState(false);
     
+    useEffect(async ()=>{
+        const checkNotExist = (rooms, roomId) => {
+            let roomLength = rooms.length;
+            for (let i=0; i < roomLength; i++) {
+                if(rooms[i].roomId === roomId) return 0;
+            }
+            return 1;
+        }
+
+        const findUserName = (users, userId) => {
+            let userLength = users.length;
+            for (let i=0; i < userLength; i++) {
+                if(users[i].userId === userId) return users[i].name;
+            }
+            return 'TODO';
+        }
+
+        if(newMessage !== null){
+            if (checkNotExist(chatRooms, newMessage.roomId)) {
+                const userName = findUserName(userList, newMessage.sender);
+                const data = {
+                    userId : loginUserInfo.userId,
+                    roomId : newMessage.roomId,
+                    roomName: userName,
+                    senderName: loginUserInfo.name,
+                }
+                await addOpenRoom(data);
+                fetchChatRooms();
+            }
+        }
+    }, [newMessage]);
+
     const onClickDM = async (e)=>{
         const targetUsers = getTargetUsers(e.target.dataset.rid);
         preDisPlayChatRoomHandler(e.target.dataset.rid, e.target.text, targetUsers);
+    }
+
+    const fetchChatRooms = async()=>{
+        try{
+            const response = await getChatRooms(loginUserInfo.userId);
+            if(response.data !== ''){
+                setChatRooms(response.data);
+            }else{
+                setChatRooms([]);
+            }
+        }catch(e){}
+    };
+
+    const onDeleteDM = async (e)=>{
+        await deleteChatRoom(loginUserInfo.userId, e.target.dataset.rid);
+        fetchChatRooms();
     }
 
     const getTargetUsers = (roomId) => {
@@ -108,6 +156,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
             userId : loginUserInfo.userId,
             roomId : roomId,
             roomName: roomName,
+            senderName: loginUserInfo.name,
         }
 
         const preHaves = chatRooms.find((room) => {
@@ -130,14 +179,16 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
     };
 
     const dmUserList = chatRooms.map(room =>(
-        <div>
+        <div key={room.roomId}>
             <a className="custom-collapse-item abtn chatOpen"
-                key={room.roomId}
                 data-rid={room.roomId}
                 onClick={onClickDM}>
                 {room.roomName}
             </a>
-            <button className="chatDelete">X</button>
+            <button className="chatDelete"
+                    data-rid={room.roomId}
+                    onClick={onDeleteDM}
+                    >X</button>
         </div>
     ));
 
@@ -149,17 +200,7 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
           }catch(e){
           }
         };
-        
-        const fetchChatRooms = async()=>{
-            try{
-                const response = await getChatRooms(loginUserInfo.userId);
-                if(response.data !== ''){
-                    setChatRooms(response.data);
-                }else{
-                    setChatRooms([]);
-                }
-            }catch(e){}
-        };
+
 
         fetchForumList();
         fetchChatRooms();
@@ -179,7 +220,8 @@ function SideBar({toggle, setToggle, setForum, userList, loginUserInfo, isSelect
                                           newMessage={newMessage}
                                           setNewMessage={setNewMessage}
                                           isSubScribe={isSubScribe}
-                                          setIsSubScribe={setIsSubScribe}>
+                                          setIsSubScribe={setIsSubScribe}
+                                          >
                                     </Chat> : null}
             <ul className={"navbar-nav bg-gradient-secondary sidebar sidebar-dark accordions" + (toggle ? ' toggled' : '')} id="accordionSidebar">
                 <a className="sidebar-brand d-flex align-items-center justify-content-center" href="#">

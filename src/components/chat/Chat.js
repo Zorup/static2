@@ -35,7 +35,7 @@ function Chat({showChatUI, setShowChatUI, loginUserInfo, stomp, setNewMessage, n
                 if(newMessage.sender !== loginUserInfo.userId){
                     insertNewChatLogs(newMessage);
                 }
-            }else{}
+            }
             setNewMessage(null);
         }
     }, [newMessage]);

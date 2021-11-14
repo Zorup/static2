@@ -107,6 +107,10 @@ export const postChatRoom = (data) =>{
     return api.post(`/chat/room`, data);
 }
 
+export const deleteChatRoom = (userId, roomId) =>{
+    return api.delete(`/chat/${userId}/room/${roomId}`);
+}
+
 export const getChatLogs = (roomId)=>{
     return api.get(`/chat/${roomId}/chat-logs`);
 }
