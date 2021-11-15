@@ -37,8 +37,13 @@ export const getUserListApi = (param) =>{
     return api.get(`/main/v1/group/users`); 
 }
 
-export const getPostView = (forumId) =>{
-    return api.get(`/main/v1/forum/${forumId}/postview`);
+export const getPostView = (forumId, oldestId = null) =>{
+    if (oldestId === null) return api.get(`/main/v1/forum/${forumId}/postview`);
+    return api.get(`/main/v1/forum/${forumId}/postview?oldestId=${oldestId}`);
+}
+
+export const deletePost= (postId) =>{
+    return api.delete(`/main/v1/post/${postId}`);
 }
 
 /**----------------------------------------------------------------------- */
@@ -119,4 +124,8 @@ export const getChatLogs = (roomId)=>{
 //components/chat 컴포넌트들에 존재하는 http 요청)
 export const postChatMsg = (param) =>{
     return api.post(`/chat/chat-log`, param);
+}
+
+export const deleteComment = (param) => {
+    return api.delete(`/main/v1/comment/${param}`);
 }

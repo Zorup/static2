@@ -1,6 +1,21 @@
 import './Comment.css'
+import {deleteComment} from "../../service/fetch"
+function Comment({comment, comments, setComments}){
+    console.log(comments);
+    const onDeleteHandler = async() => {
+        const findCommentId = (commentId) => {
+            for (let i=0; i<comments.length; i++) {
+                if (comments[i].commentId === commentId) return i;
+            }
+            return -1;
+        }
 
-function Comment({comment}){
+        await deleteComment(comment.commentId);
+        console.log(comments);
+        const newComments = [...comments];
+        newComments.splice(findCommentId(comments.commentId), 1);
+        setComments(newComments);
+    }
     return (
     <>
         <div className="comment border border-light rounded">
@@ -14,7 +29,8 @@ function Comment({comment}){
                     <span className="d-block font-weight-bold name" >
                         <span className="mr-1">{comment.userName}</span>
                         <a href="#" className="anchor-time">{comment.createdDate}</a>
-                        <button className="commentDelete">X</button>
+                        <button className="commentDelete"
+                                onClick={onDeleteHandler}>X</button>
                     </span>
                     <div>
                         <span>{comment.content}</span>

@@ -3,15 +3,18 @@ import Comment from "./Comment";
 import {useState} from "react"
 import './post.css'
 
-import {postPostLikes} from "../../service/fetch"
+import {postPostLikes, deletePost} from "../../service/fetch"
 
-function Post({post, pushTargetUsers}){
+function Post({post, pushTargetUsers, posts, setPosts}){
     const [likes, setLikes] = useState(post.likes);
     const [comments, setComments] = useState(post.comments);
     const [isOpen, setMenu] = useState(false);
 
     const commentList = comments.map(item => (
-        <Comment comment={item} key={item.commentId}/>
+        <Comment comment={item}
+                 key={item.commentId}
+                 comments={comments}
+                 setComments={setComments}/>
     ));
         
     const toggleComment = () => {
@@ -22,14 +25,31 @@ function Post({post, pushTargetUsers}){
         try{
             const response = await postPostLikes(post.postId);
             setLikes(response.data.data)
-        }catch(e){
+        } catch(e) {
+        }
+    }
+
+    const onClickDropPost = async()=>{
+        const findPostId = (postId) => {
+            for (let i=0; i<posts.length; i++) {
+                if (posts[i].postId === postId) return i;
+            }
+            return -1;
+        }
+
+        try {
+            await deletePost(post.postId);
+            const newPosts = [...posts];
+            newPosts.splice(findPostId(post.postId), 1);
+            setPosts(newPosts);
+        } catch(e) {
         }
     }
 
     return(
         <>
             <div className="bg-white pt-2 pl-2 pr-2">    
-                <button className="postDrop">X</button>
+                <button className="postDrop" onClick={onClickDropPost}>X</button>
                 <div className="d-flex flex-row user-info">
                     <img className="rounded-circle" src="img/undraw_profile.svg" width="60" height="60"/>
                     <div className="d-flex flex-column justify-content-start ml-2">
@@ -61,9 +81,9 @@ function Post({post, pushTargetUsers}){
                 </div>
             </div>
             <div className={isOpen ? "show-menu" : "hide-menu"}>
-            {commentList}
+                {commentList}
+                <CreateComment postId={post.postId} comments={comments} setComments={setComments} pushTargetUsers={pushTargetUsers}/>
             </div>
-            <CreateComment postId={post.postId} comments={comments} setComments={setComments} pushTargetUsers={pushTargetUsers}/>
         </>
     )
 }

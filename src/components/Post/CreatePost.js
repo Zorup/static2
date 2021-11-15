@@ -10,7 +10,6 @@ function CreatePost({forumId, groupId, loginUserInfo, posts, setPosts}){
     const [content, setContent] = useState("");
     const quillRef = useRef();
     const onChangeContent = (value) => {
-        console.log(value);
         setContent(value);
     }
 

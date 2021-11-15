@@ -4,7 +4,7 @@ import CreatePost from '../components/Post/CreatePost';
 import Post from '../components/Post/Post';
 import {UserInformation, DeepUserInfoSet} from '../module/mention'
 import 'firebase/messaging'
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import './groupPage.css'
 
 import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
@@ -21,13 +21,31 @@ function GroupPage({loginUserInfo}) {
     const [groupId] = useState(1);
     const [userList, setUserList] = useState([]);
     const [isSelected, setIsSelected] = useState({isSelected : false, uid : null, uname: null});
-
+    const showMoreElement = useRef();
     const pushTargetUsers = {};
 
     const controlSideBar = (state) => {
       setToggle(state);
-    };
+    }; 
 
+    useEffect(()=>{
+      if(showMoreElement === undefined) return;
+      console.log(showMoreElement.current);
+    }, [showMoreElement])
+
+    const showButtonHandler = async() => {
+        if (posts.length === 0) return;
+        const oldestId = posts[posts.length-1].postId;
+
+        const response = await getPostView(forumId, oldestId);
+        let views = await parseView(response.data.list)
+        let newPosts = [...posts];
+
+        for (let i=0; i<views.length; i++) {
+            newPosts.push(views[i]);
+        }
+        setPosts(newPosts);
+    }
     const movePageTop = ()=>{
       window.scrollTo({top:0, behavior: 'smooth'});
     };
@@ -109,7 +127,7 @@ function GroupPage({loginUserInfo}) {
     }, [forumId])
 
     const postList = posts.map(item =>(
-        <Post post={item} key={item.postId} pushTargetUsers={pushTargetUsers}/>
+        <Post post={item} key={item.postId} pushTargetUsers={pushTargetUsers} posts={posts} setPosts={setPosts}/>
     ));
 
     return (
@@ -138,7 +156,9 @@ function GroupPage({loginUserInfo}) {
                 </div>
             </div>
             
-            <button className="showMore">Show More ?</button>
+            <button className="showMore"
+                    onClick={showButtonHandler}
+                    ref={showMoreElement}>Show More ?</button>
 
             <footer className="sticky-footer bg-white">
                     <div className="container my-auto">
