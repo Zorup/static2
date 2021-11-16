@@ -1,7 +1,6 @@
 import './Comment.css'
 import {deleteComment} from "../../service/fetch"
 function Comment({comment, comments, setComments}){
-    console.log(comments);
     const onDeleteHandler = async() => {
         const findCommentId = (commentId) => {
             for (let i=0; i<comments.length; i++) {
@@ -11,7 +10,6 @@ function Comment({comment, comments, setComments}){
         }
 
         await deleteComment(comment.commentId);
-        console.log(comments);
         const newComments = [...comments];
         newComments.splice(findCommentId(comments.commentId), 1);
         setComments(newComments);

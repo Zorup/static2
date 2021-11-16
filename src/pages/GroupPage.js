@@ -23,15 +23,9 @@ function GroupPage({loginUserInfo}) {
     const [isSelected, setIsSelected] = useState({isSelected : false, uid : null, uname: null});
     const showMoreElement = useRef();
     const pushTargetUsers = {};
-
     const controlSideBar = (state) => {
       setToggle(state);
     }; 
-
-    useEffect(()=>{
-      if(showMoreElement === undefined) return;
-      console.log(showMoreElement.current);
-    }, [showMoreElement])
 
     const showButtonHandler = async() => {
         if (posts.length === 0) return;
@@ -51,7 +45,11 @@ function GroupPage({loginUserInfo}) {
     };
 
     if(window.location.hash !== undefined && window.location.hash.length > 5){
-      const newId = parseInt(window.location.hash.split('/')[1]);
+      console.log("!!!!!!")
+      console.log(window.location.hash)
+      const splitHash = window.location.hash.split('/')
+      const newId = parseInt(splitHash[1]);
+      
       if(!isNaN(newId) && (newId !== forumId)){
         window.location.hash = `forum/${newId}`;
         setForumId(newId);
@@ -72,7 +70,6 @@ function GroupPage({loginUserInfo}) {
           const userInfoArr = item.text.split(" ");
           const currentPostId = e.$element.parent().data("id");
           const userId = Number.parseInt(userInfoArr[2]);
-          
           if(!pushTargetUsers.hasOwnProperty(currentPostId)) {
             pushTargetUsers[currentPostId] = new DeepUserInfoSet();
           }
@@ -141,7 +138,7 @@ function GroupPage({loginUserInfo}) {
   
         <div id="content-wrapper" className="d-flex flex-column">
           <div id="content">
-              <TopBar toggle={toggle} setToggle={controlSideBar}/>
+              <TopBar toggle={toggle} setToggle={controlSideBar} setPosts={setPosts}/>
               <div className="container-fluid" id="mainFeed">
                 <CreatePost forumId={forumId} groupId={groupId} posts={posts} setPosts={setPosts}/>
                 <hr></hr>

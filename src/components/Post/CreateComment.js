@@ -11,6 +11,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
         params.append('postId', postId);
         params.append('content', textAreaRef.current.value);
         try{
+            console.log(pushTargetUsers);
             const response = await postComment(params);
             textAreaRef.current.value="";
             const newComments = [...comments];
@@ -21,7 +22,7 @@ function CreateComment({postId, comments, setComments, pushTargetUsers, sender})
             if(pushTargetUsers.hasOwnProperty(postId)){
                 console.log("push message!");
                 let pushRequestData = getNotiRequestData(new UserInformation(sender.userId, sender.name), 
-                                                        pushTargetUsers, postId, true);
+                                                        pushTargetUsers, postId, true, postId);
                 
                 await postPushMessage(pushRequestData);
                 delete pushTargetUsers[postId];

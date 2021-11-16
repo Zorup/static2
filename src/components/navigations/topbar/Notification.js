@@ -2,11 +2,11 @@ import NotificationDropDown from "./NotificationDropDown"
 import './Notification.css'
 import React, { useState, useEffect } from 'react';
 
-function Notification({section, icon, dropDownList}){
+function Notification({section, icon, dropDownList, setPosts}){
     const [dropDownItems, setDropDownItems] = useState([]);
     const [notRead, setNotReadValue] = useState(0);
     let dropDowns = dropDownItems.map(item => (
-            <NotificationDropDown item={item} key={item.notificationId}/>
+            <NotificationDropDown item={item} setPosts={setPosts} key={item.notificationId}/>
     ));
     
     useEffect(()=>{

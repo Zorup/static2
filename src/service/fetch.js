@@ -42,6 +42,10 @@ export const getPostView = (forumId, oldestId = null) =>{
     return api.get(`/main/v1/forum/${forumId}/postview?oldestId=${oldestId}`);
 }
 
+export const getOnePost = (postId) =>{
+    return api.get(`/main/v1/post/${postId}`);
+}
+
 export const deletePost= (postId) =>{
     return api.delete(`/main/v1/post/${postId}`);
 }

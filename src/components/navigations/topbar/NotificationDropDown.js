@@ -2,9 +2,10 @@ import React, {useState, useCallback} from 'react';
 import './Notification.css'
 import {connect} from 'react-redux';
 import {setReadYnTrue} from '../../../module/mention'
-import {patchMentionReadYn} from '../../../service/fetch'
+import {patchMentionReadYn, getOnePost} from '../../../service/fetch'
+import {parseView} from '../../../service/parse'
 
-function NotificationDropDown({item, clickRender}){
+function NotificationDropDown({item, clickRender, setPosts}){
     const [readYn, setReadYn] = useState(item.readYn);
     const onClickHandler = useCallback(async (e)=>{
         // drop 다운 내부 클릭시 드롭다운 리스트가 자동으로 풀림 방지 
@@ -15,10 +16,14 @@ function NotificationDropDown({item, clickRender}){
                 clickRender(item.notificationId);
                 setReadYn(true);
             }
+            const response = await getOnePost(item.postId);
+            let views = await parseView([response.data.data])
+            setPosts(views)
         }catch(e){}
     });
+
     return(
-        <a className="dropdown-item d-flex align-items-center" href="#" onClick={onClickHandler}>
+        <a className="dropdown-item d-flex align-items-center" href='#nt' onClick={onClickHandler}>
             <div>
                 <div className="small text-gray-500">
                     {item.createDate.month} {item.createDate.dayOfMonth}, {item.createDate.year}

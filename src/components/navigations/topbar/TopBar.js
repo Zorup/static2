@@ -5,7 +5,7 @@ import UserInformation from './UserInformation'
 import {connect} from 'react-redux';
 import './topBar.css'
 
-function TopBar({toggle, setToggle, mentionList}){
+function TopBar({toggle, setToggle, mentionList, setPosts}){
     const controlParentToggle = () =>{
         setToggle(!toggle);
     };
@@ -19,7 +19,7 @@ function TopBar({toggle, setToggle, mentionList}){
             <SearchBar/>
 
             <ul className="navbar-nav ml-auto">
-                <Notification section="Alerts Center" dropDownList={mentionList} icon="fa-bell"/>
+                <Notification section="Alerts Center" dropDownList={mentionList} setPosts={setPosts} icon="fa-bell"/>
                 <div className="topbar-divider d-none d-sm-block"></div>
                 <UserInformation/>
             </ul>

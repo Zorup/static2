@@ -36,6 +36,7 @@ function App({isLogin, loginUserInfo, setFcmAlert}) {
       data.notificationId = parseInt(data.notificationId);
       data.readYn = (data.readYn === 'true');
       console.log("ForeGroud");
+      console.log(data)
       new Notification("h");
       setFcmAlert(data);
     });

@@ -35,11 +35,12 @@ export class DeepUserInfoSet extends Set {
     };
 }
 
-export const getNotiRequestData = (sender, pushTargetUsers, currentTargetId, eventType) => {
+export const getNotiRequestData = (sender, pushTargetUsers, currentTargetId, eventType, postId=-1) => {
     let pushRequestData = {
         "sender": sender,
         "receivers":[],
-        "eventType": eventType
+        "eventType": eventType,
+        "postId": postId,
     };
     if(eventType === true) {
         pushTargetUsers[currentTargetId].forEach(v => {
