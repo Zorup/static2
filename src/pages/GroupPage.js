@@ -11,10 +11,35 @@ import {reIssuedTokenApi, getUserListApi, getPostView} from '../service/fetch'
 import {parseView} from '../service/parse'
 import {connect} from 'react-redux';
 
+import {logOut} from '../module/login'
+import {clearMentionList} from '../module/mention'
+
 import $ from 'jquery';
 require('../libs/bootstrap-suggest-master/dist/bootstrap-suggest')
 
-function GroupPage({loginUserInfo}) {
+function GroupPage({loginUserInfo, clearMentionList, clearUserInfo}) {
+  const onClickLogOut = () =>{
+        clearMentionList();
+        clearUserInfo();
+};
+
+  const isValidAccessToken = async()=>{
+    try{
+      await getPostView(1);
+    }catch(e){
+      if(e.response.data === 'Expired'){
+        const isSuccess = await reIssuedTokenApi(loginUserInfo.refreshToken);
+        console.log(isSuccess)
+        if (isSuccess) {
+          window.location.reload()
+        } else {
+          onClickLogOut()
+        }
+      }
+    }
+  };
+  isValidAccessToken();
+
     const [forumId, setForumId] = useState(1);
     const [posts, setPosts] = useState([]); 
     const [toggle, setToggle] = useState(false);
@@ -45,8 +70,6 @@ function GroupPage({loginUserInfo}) {
     };
 
     if(window.location.hash !== undefined && window.location.hash.length > 5){
-      console.log("!!!!!!")
-      console.log(window.location.hash)
       const splitHash = window.location.hash.split('/')
       const newId = parseInt(splitHash[1]);
       
@@ -114,10 +137,6 @@ function GroupPage({loginUserInfo}) {
           let views = await parseView(response.data.list)
           setPosts(views);
         }catch(e){
-          if(e.response.data === 'Expired'){
-            const isSuccess = await reIssuedTokenApi(loginUserInfo.refreshToken);
-            console.log(isSuccess)
-          }
         }
       };
       fetchPosts();
@@ -180,6 +199,17 @@ const mapStateToProps = state => ({
     loginUserInfo: state.checkLogin.loginUserInfo,
 });
 
+
+const mapDispatchToProps = dispatch => ({
+  clearUserInfo: ()=>{
+      dispatch(logOut());
+  },
+  clearMentionList: ()=>{
+      dispatch(clearMentionList());
+  }
+});
+
 export default connect(
   mapStateToProps,
+  mapDispatchToProps
 )(GroupPage);
